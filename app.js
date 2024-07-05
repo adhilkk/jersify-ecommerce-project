@@ -28,6 +28,7 @@ app.get('/', (req, res) => {
 app.get('/cart', (req, res) => {
     res.render('users/cart.ejs')
   });
+  
 //
 const indexRoute = require('./routes/index');
 app.use('/', indexRoute);

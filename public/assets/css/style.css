@@ -1164,6 +1164,14 @@ blockquote.text-white cite span {
     padding-bottom: .75rem
 }
 
+
+.loginbtn{
+    color: white;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    margin-left: 0%;
+    padding-left: 30%;
+
+}
 .wishlist-link {
     display: flex;
     align-items: center;
