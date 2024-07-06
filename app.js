@@ -17,7 +17,7 @@ app.use('js', express.static(path.join(__dirname, 'public/assets/js')));
 app.set('view engine', 'ejs');
 
 // Database connection
-mongoose.connect('mongodb://localhost:27017/ecommerce')
+mongoose.connect('mongodb://localhost:27017/jersify')
   .then(() => console.log('MongoDB connected'))
   .catch(err => console.log(err));
 
@@ -30,7 +30,7 @@ app.get('/cart', (req, res) => {
   });
   
 //
-const indexRoute = require('./routes/index');
+const indexRoute = require('./routes/user');
 app.use('/', indexRoute);
 
 
