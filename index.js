@@ -20,7 +20,10 @@ app.set('view engine', 'ejs');
 mongoose.connect('mongodb://localhost:27017/jersify')
   .then(() => console.log('MongoDB connected'))
   .catch(err => console.log(err));
+// user routes
+const user_routes = require("./routes/userRoute");
 
+app.use('/api',user_routes)
 // Routes
 app.get('/', (req, res) => {
   res.render('users/home.ejs')
@@ -30,7 +33,7 @@ app.get('/cart', (req, res) => {
   });
   
 //
-const indexRoute = require('./routes/user');
+const indexRoute = require('./routes/userRoute');
 app.use('/', indexRoute);
 
 
