@@ -13,15 +13,17 @@ const register_user = async(req, res) => {
         }
     }
     try {
-        const spassword =  await securePassword(req.body.password)
+        const spassword =  await securePassword(req.body.registerPassword)
       const user = new User({
-        fullName:req.body.name,
-        email:req.body.email,
+        fullName:req.body.userFullName,
+        email:req.body.registerEmail,
         password:spassword,
-        phoneNumber:req.body.phoneNumber,
+        phoneNumber:req.body.registerPhone,
       });
 
-      const userData = await User.findOne({email:req.body.email});
+      console.log(user);
+
+      const userData = await User.findOne({email:req.body.registerEmail});
       if(userData){
         res.status(200).send({success:false,msg:"this email is already exists"});
       }else{
