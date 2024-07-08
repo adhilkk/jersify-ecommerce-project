@@ -7,6 +7,10 @@ const bcryptjs = require("bcryptjs");
 
 //user registeration
 const register_user = async(req, res) => {
+  const { userFullName, registerEmail, registerPhone, registerPassword, registerCpassword } = req.body;
+  if (registerPassword !== registerCpassword) {
+    return res.render('users/register', { pswMsg: 'Passwords do not match', success: false });
+  }
 
     const securePassword = async(password)=>{
         try {
@@ -29,7 +33,8 @@ const register_user = async(req, res) => {
 
       const userData = await User.findOne({email:req.body.registerEmail});
       if(userData){
-        res.status(200).send({success:false,msg:"this email is already exists"});
+        // res.status(200).send({success:false,msg:"this email is already exists"});
+         res.render('users/register', { registerMsg: 'Email already exists', registerSuccess: false });
       }else{
         const user_data = await user.save();
         res.status(200).send({success:true,data:user_data})

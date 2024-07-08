@@ -21,6 +21,9 @@ user_router.get('/', (req, res) => {
 user_router.get('/login', (req, res) => {
   res.render('../views/users/login.ejs', { title: 'Login' });
 });
+user_router.get('/register', (req, res) => {
+  res.render('../views/users/register.ejs', { title: 'register' });
+});
 user_router.get('/shop', (req, res) => {
   res.render('../views/users/shop.ejs', { title: 'Login' });
 });
