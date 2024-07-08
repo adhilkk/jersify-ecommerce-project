@@ -11,6 +11,8 @@ const path = require("path");
 
 user_router.use(express.static('public'))
 
+const userAuth = require('../middleware/userAuth')
+
 
 
 
@@ -30,6 +32,9 @@ user_router.get('/shop', (req, res) => {
 user_router.get('/wishlist', (req, res) => {
   res.render('../views/users/wishlist.ejs', { title: 'Login' });
 });
+user_router.get('/myProfile', (req, res) => {
+  res.render('../views/users/myProfile.ejs', { title: 'myProfile' });
+});
 
 
 
@@ -41,5 +46,8 @@ user_router.post('/register', (req, res) => {
 });
 
 user_router.post('/login',user_Controller.login_user);
+
+user_router.post('/register', user_Controller.register_user);
+user_router.post('/verify-otp', user_Controller.verify_otp);
 
 module.exports = user_router;

@@ -56,11 +56,15 @@
 							    
 							</ul>
 							<div class="tab-content">
+                                <% if (typeof error !== 'undefined') { %>
+                                    <p class="text-danger"><%= error %></p>
+                                <% } %>
+                                
                                 <div class="tab-pane fade show  active" id="signin-2" role="tabpanel" aria-labelledby="signin-tab-2">
-                                  <form action="/users/login" method="post">
+                                  <form action="/login" method="post">
                                     <div class="form-group">
                                       <label for="signin-email-2">Email address *</label>
-                                      <input type="email" class="form-control" id="signin-email-2" name="email" required>
+                                      <input type="email" class="form-control" id="signin-email-2" name="Email" required>
                                     </div><!-- End .form-group -->
                               
                                     <div class="form-group">
@@ -71,6 +75,10 @@
                                     <div class="form-footer">
                                       <button type="submit" class="btn btn-outline-primary-2">
                                         <span>LOG IN</span>
+                                        <i class="icon-long-arrow-right"></i>
+                                      </button>
+                                      <button type="submit" class="btn btn-outline-primary-2" onclick="window.location.href='/register';">
+                                        <span>REGISTER</span>
                                         <i class="icon-long-arrow-right"></i>
                                       </button>
                               

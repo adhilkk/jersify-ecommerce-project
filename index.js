@@ -3,6 +3,12 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const path = require('path')
 const userRouter = require('./routes/userRoute');
+const nocache = require('nocache')
+const  session = require('express-session')
+const User = require("./models/userModel");
+
+
+require("dotenv").config();
 
 const app = express();
 
@@ -13,6 +19,13 @@ app.use('css', express.static(path.join(__dirname, 'public/assets/css')));
 
 app.use('/assets', express.static(path.join(__dirname, 'public/assets')));
 app.use('js', express.static(path.join(__dirname, 'public/assets/js')));
+app.use(nocache());
+app.use(express.static(path.join(__dirname, 'public')));
+app.use("/public", express.static(path.join(__dirname, 'public')));
+
+
+
+
 
 // View Engine
 app.set('view engine', 'ejs');
