@@ -2,6 +2,10 @@
 
 const User = require("../models/userModel")
 const bcryptjs = require("bcryptjs");
+
+
+
+//user registeration
 const register_user = async(req, res) => {
 
     const securePassword = async(password)=>{
@@ -38,6 +42,33 @@ const register_user = async(req, res) => {
     }
   };
   
+
+
+  const login_user = async (req, res) => {
+    try {
+      const { email, password } = req.body;
+      const userData = await User.findOne({ email });
+  
+      if (!userData) {
+        return res.render('users/login', { error: 'Invalid email or password' });
+      }
+  
+      const isPasswordMatch = await bcryptjs.compare(password, userData.password);
+      if (!isPasswordMatch) {
+        return res.render('users/login', { error: 'Invalid email or password' });
+      }
+  
+      // Handle successful login 
+      res.redirect('/'); // Adjust the redirect as needed
+  
+    } catch (error) {
+      res.status(400).send(error.message);
+    }
+  };
+  
+
+  
   module.exports = {
-    register_user
+    register_user,
+    login_user
   };

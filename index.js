@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const path = require('path')
+const userRouter = require('./routes/userRoute');
 
 const app = express();
 
@@ -36,6 +37,9 @@ app.get('/cart', (req, res) => {
 const indexRoute = require('./routes/userRoute');
 app.use('/', indexRoute);
 
+
+//user login 
+app.use('/users', userRouter);
 
 // Server
 const PORT = process.env.PORT || 5000;

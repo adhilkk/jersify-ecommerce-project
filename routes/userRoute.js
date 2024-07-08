@@ -30,10 +30,13 @@ user_router.get('/wishlist', (req, res) => {
 
 
 
+
 user_router.post('/register',user_Controller.register_user)
 
 user_router.post('/register', (req, res) => {
  
 });
+
+user_router.post('/login',user_Controller.login_user);
 
 module.exports = user_router;
