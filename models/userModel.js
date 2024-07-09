@@ -5,6 +5,7 @@ const user = new mongoose.Schema({
   email: { type: String, required: true },
   phoneNumber: { type: Number, required: true },
   password: { type: String, required: true },
+  is_blocked: {type: Boolean,default: false}
 
 });
 

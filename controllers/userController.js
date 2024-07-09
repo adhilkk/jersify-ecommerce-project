@@ -107,24 +107,28 @@ const verify_otp = async (req, res) => {
 };
   
 
-  const login_user = async (req, res) => {
-    try {
-        const { Email, password } = req.body;
+const login_user = async (req, res) => {
+  try {
+      const { Email, password } = req.body;
 
-        const userData = await User.findOne({ email : Email });
+      const userData = await User.findOne({ email: Email });
 
-         if (!userData || !(await bcryptjs.compare(password, userData.password))) {
-            // Invalid email or password
-            return res.render('users/login', { error: 'Invalid email or password' });
-        }
+      if (!userData || !(await bcryptjs.compare(password, userData.password))) {
+          // Invalid email or password
+          return res.render('users/login', { error: 'Invalid email or password' });
+      }
 
-        // Handle successful login 
-        
-          res.render('users/dashboard'); // Adjust the redirect as needed
+      if (userData.is_blocked) {
+          // User is blocked
+          return res.render('users/login', { error: 'Your account is blocked. Please contact support.' });
+      }
 
-    } catch (error) {
-        res.status(400).send(error.message);
-    }
+      // Handle successful login
+      res.render('users/home1'); // Adjust the redirect as needed
+
+  } catch (error) {
+      res.status(400).send(error.message);
+  }
 };
 
   
