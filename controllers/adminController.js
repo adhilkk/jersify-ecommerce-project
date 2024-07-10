@@ -1,6 +1,8 @@
 const User = require("../models/userModel")
 const Admin = require("../models/adminModel")
 const bcrypt = require("bcryptjs");
+const Category = require("../models/categoryModel")
+const categoryController= require('../controllers/categoryController');
 
 
 
@@ -100,6 +102,44 @@ const renderLogin = (req, res) => {
     }
   };
 
+
+
+
+
+
+
+//adminCategory
+
+const adminCategory = async (req, res) => {
+
+  try {
+
+      const limit = 5;
+      const page = parseInt(req.query.page) || 1;
+      const skip = (page - 1) * limit;
+
+      const totalCatCount = await Category.countDocuments();
+      const totalPages = Math.ceil(totalCatCount / limit);
+
+      const categoryData = await Category.find()
+
+      .skip(skip)
+      .limit(limit);
+
+      res.render("../views/admin/adminCategory.ejs" , {Category : categoryData ,  currentPage: page, totalPages});
+      
+  } catch (error) {
+      
+      console.log(error.message);
+
+  }
+
+};
+
+
+
+
+
 module.exports= {
     loadusers,
     renderDashboard,
@@ -107,5 +147,6 @@ module.exports= {
     renderLogin,
     getUsers,
     toggleBlockUser,
+    adminCategory,
 }
 
