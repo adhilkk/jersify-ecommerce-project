@@ -1,6 +1,8 @@
 
 
 const User = require("../models/userModel")
+const product = require("../models/product")
+const category = require("../models/categoryModel")
 const bcryptjs = require("bcryptjs");
 const nodemailer = require('nodemailer');
 
@@ -131,11 +133,26 @@ const login_user = async (req, res) => {
   }
 };
 
+
+const products = async(req,res)=>{
+  try {
+
+      const producDataa = await product.find({status :true}).populate('category')
+      // console.log(producData);
+      const categoryData = await category.find({is_listed: true})
+
+      res.render('users/product' , { producData : producDataa,categoryData})
+
+  } catch (error) {
+      console.log(error.message);
+  }
+}
   
 
   
   module.exports = {
     register_user,
     login_user,
-    verify_otp
+    verify_otp,
+    products,
   };
