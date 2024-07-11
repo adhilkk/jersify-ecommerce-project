@@ -8,7 +8,7 @@ const productSchema=new mongoose.Schema({
     status:{type:Boolean,default:true},
     image:{type:Array,required:true},
     category:{type:mongoose.Schema.Types.ObjectId,required:true,ref:'Category'},
-    descripition:{type:String,requried:true},
+    description:{type:String,requried:true},
     createdAt:{type:Date,requried:true},
     discount: { type: Number, default: 0 },
     dis_price : {type : Number , default : 0}

@@ -9,7 +9,7 @@ const  session = require('express-session')
 const User = require("./models/userModel");
 
 
-require("dotenv").config();
+require('dotenv').config();
 
 const app = express();
 
@@ -28,7 +28,11 @@ app.use("/public", express.static(path.join(__dirname, 'public')));
 
 
 
-
+app.use(session({
+  resave: false,
+  saveUninitialized: true,
+  secret: process.env.SESSION_SECRET 
+}));
 
 // View Engine
 app.set('view engine', 'ejs');
@@ -51,7 +55,7 @@ app.get('/cart', (req, res) => {
   
 //
 const indexRoute = require('./routes/userRoute');
-app.use('/', indexRoute);
+app.use('/', indexRoute); 
 
 
 //user login 
@@ -64,7 +68,7 @@ app.use('/admin', adminRouter);
 const Admin = require('./models/adminModel');
 const bcryptjs = require("bcryptjs");
 
-
+ 
 
 app.get('/qqqq', async (req, res) => {
   const securePassword = async (password) => {

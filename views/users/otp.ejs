@@ -33,47 +33,56 @@
    
 
     <%- include('../layouts/navbar.ejs')-%>
+    <main class="main">
+        <nav aria-label="breadcrumb" class="breadcrumb-nav border-0 mb-0">
+          <div class="container">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+              <li class="breadcrumb-item"><a href="#">Pages</li>
+              <li class="breadcrumb-item active" aria-current="page">Login</li>
+            </ol>
+          </div>
+        </nav>
+      
+        <div class="login-page bg-image pt-8 pb-8 pt-md-12 pb-md-12 pt-lg-17 pb-lg-17" style="background-image: url('assets/images/backgrounds/login-bg.jpg')">
+          <div class="container ">
+            <div class="form-box">
+              <div class="form-tab " >
+                <ul class="nav nav-pills nav-fill" role="tablist">
+                  <li class="nav-item">
+                    <a class="nav-link active" id="signin-tab-2" data-toggle="tab" href="#signin-2" role="tab" aria-controls="signin-2" aria-selected="false">OTP</a>
+                  </li>
+                </ul>
+                
+                <form action="/verify-otp" method="post">
+                  <input type="hidden" name="email" value="<%= email %>">
+                  <div>
+                    <br>
+                    <label for="otp">Enter OTP:</label>
+                    <input type="text" id="otp" name="otp" required>
 
-        <main class="main">
-            <nav aria-label="breadcrumb" class="breadcrumb-nav border-0 mb-0">
-                <div class="container">
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-                        <li class="breadcrumb-item"><a href="#">Pages</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Login</li>
-                    </ol>
-                </div><!-- End .container -->
-            </nav><!-- End .breadcrumb-nav -->
+                    <% if (typeof otpMsg !== 'undefined') { %>
+                        <p class="danger" style="color: red;"><%= otpMsg %></p>
+                      <% } %>
 
-            <div class="login-page bg-image pt-8 pb-8 pt-md-12 pb-md-12 pt-lg-17 pb-lg-17" style="background-image: url('assets/images/backgrounds/login-bg.jpg')">
-            	<div class="container">
-            		<div class="form-box">
-            			<div class="form-tab">
-	            			<ul class="nav nav-pills nav-fill" role="tablist">
-							    <li class="nav-item">
-							        <a class="nav-link active" id="signin-tab-2" data-toggle="tab" href="#signin-2" role="tab" aria-controls="signin-2" aria-selected="false">otp</a>
-							    </li>
-							    
-							</ul>
-							<h1>OTP Verification</h1>
-  <form action="/verify-otp" method="post">
-    <input type="hidden" name="email" value="<%= email %>">
-    <div>
-      <label for="otp">Enter OTP:</label>
-      <input type="text" id="otp" name="otp" required>
-    </div>
-    <button type="submit">Verify OTP</button>
-  </form>
-  <% if (typeof otpMsg !== 'undefined') { %>
-    <p class="danger"><%= otpMsg %></p>
-  <% } %>
-                              
-						</div><!-- End .form-tab -->
-            		</div><!-- End .form-box -->
-            	</div><!-- End .container -->
-            </div><!-- End .login-page section-bg -->
-        </main><!-- End .main -->
+                      <p>OTP expires in <span id="timer">60</span> seconds</p>
 
+                      <br>
+                  </div>
+                  <button type="submit" style="background-color: #4CAF50; color: white; padding: 10px 20px; border: none; cursor: pointer;">Verify OTP</button>
+    
+                  
+                    <button id="resend-btn" disabled style="background-color: #3e4c5176; color: white; padding: 10px 20px; border: none; cursor: pointer;" onclick="resendOTP()">Resend OTP</button>
+                
+                </form>
+                
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+      
         <footer class="footer">
         	<div class="footer-middle">
 	            <div class="container">
@@ -359,6 +368,53 @@
     <script src="assets/js/owl.carousel.min.js"></script>
     <!-- Main JS File -->
     <script src="assets/js/main.js"></script>
+    
+<script>
+    let timer = 60;
+    const timerElement = document.getElementById('timer');
+    const resendBtn = document.getElementById('resend-btn');
+  
+    const countdown = setInterval(() => {
+      timer--;
+      timerElement.textContent = timer;
+      if (timer === 0) {
+        clearInterval(countdown);
+        resendBtn.disabled = false;
+      }
+    }, 1000);
+  
+    function resendOTP() {
+      fetch('/resend-otp', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email: '<%= email %>' }),
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            alert('OTP resent successfully');
+            timer = 60;
+            resendBtn.disabled = true;
+            resendBtn.style.backgroundColor = '#cccccc';
+            countdown = setInterval(() => {
+              timer--;
+              timerElement.textContent = timer;
+              if (timer === 0) {
+                clearInterval(countdown);
+                console.log("qwedrfhjhnbv");
+                resendBtn.style.backgroundColor = '#008CBA';
+                resendBtn.disabled = false;
+              }
+            }, 1000);
+          } else {
+            alert('Failed to resend OTP');
+          }
+        });
+    }
+    resendBtn.addEventListener('click', resendOTP);
+  </script>
 </body>
 
 

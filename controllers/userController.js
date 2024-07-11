@@ -9,11 +9,12 @@ const nodemailer = require('nodemailer');
 // In-memory storage for OTPs and user data
 const otpStorage = {};
 
+
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: 'adhilkk8@gmail.com',
-    pass: 'dfwx sikz dfqe erjq'
+    user: 'adhilkk8@gmail.com', 
+    pass: 'dfwx sikz dfqe erjq'   
   }
 });
 
@@ -23,10 +24,11 @@ const generateOTP = () => {
 
 const sendOTP = (email, otp) => {
   const mailOptions = {
-    from: 'adhilkk8@gmail.com',
+    from: 'your-email@gmail.com', // Replace with your email
     to: email,
     subject: 'OTP Verification',
-    text: `Your OTP is ${otp}`
+    text: `Hello, Welcome to JERSIFY
+    Your OTP is ${otp}`
   };
 
   transporter.sendMail(mailOptions, (error, info) => {
@@ -37,7 +39,6 @@ const sendOTP = (email, otp) => {
     }
   });
 };
-
 
 const register_user = async (req, res) => {
   const { userFullName, registerEmail, registerPhone, registerPassword, registerCpassword } = req.body;
@@ -57,24 +58,25 @@ const register_user = async (req, res) => {
 
   try {
     const spassword = await securePassword(registerPassword);
-    console.log(spassword + "pppppp");
     const otp = generateOTP();
+    const otpTimestamp = Date.now();
 
     const userData = await User.findOne({ email: registerEmail });
     if (userData) {
       res.render('users/register', { registerMsg: 'Email already exists', registerSuccess: false });
     } else {
-      // Store user data and OTP in the in-memory object
+      // Store user data, OTP, and timestamp in the in-memory object
       otpStorage[registerEmail] = {
         fullName: userFullName,
         email: registerEmail,
         password: spassword,
         phoneNumber: registerPhone,
-        otp: otp
+        otp: otp,
+        otpTimestamp: otpTimestamp
       };
 
       sendOTP(registerEmail, otp);
-      res.render('users/otp', { email: registerEmail }); // Render OTP page with email
+      res.render('users/otp', { email: registerEmail });
     }
   } catch (error) {
     res.status(400).send(error.message);
@@ -89,6 +91,13 @@ const verify_otp = async (req, res) => {
       return res.render('users/otp', { otpMsg: 'Invalid email', email: email });
     }
 
+    const currentTime = Date.now();
+    const otpValidDuration = 60 * 1000; // 1 minute in milliseconds
+
+    if (currentTime - tempUser.otpTimestamp > otpValidDuration) {
+      return res.render('users/otp', { otpMsg: 'OTP has expired', email: email });
+    }
+
     if (tempUser.otp === otp) {
       const newUser = new User({
         fullName: tempUser.fullName,
@@ -101,13 +110,33 @@ const verify_otp = async (req, res) => {
       delete otpStorage[email]; // Remove temporary user data
       res.redirect('/login'); // Redirect to login page after successful verification
     } else {
-      res.redirect('users/otp', { otpMsg: 'Invalid OTP', email: email });
+      res.render('users/otp', { otpMsg: 'Invalid OTP', email: email });
     }
   } catch (error) {
     res.status(400).send(error.message);
   }
 };
-  
+
+const resend_otp = async (req, res) => {
+  const { email } = req.body;
+  try {
+    const tempUser = otpStorage[email];
+    if (!tempUser) {
+      return res.status(400).json({ success: false, message: 'Invalid email' });
+    }
+
+    const newOTP = generateOTP();
+    const otpTimestamp = Date.now();
+    tempUser.otp = newOTP; // Update the OTP in the in-memory storage
+    tempUser.otpTimestamp = otpTimestamp; // Update the OTP timestamp
+    sendOTP(email, newOTP);
+
+    res.json({ success: true, message: 'OTP resent successfully' });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Failed to resend OTP' });
+  }
+};
+
 
 const login_user = async (req, res) => {
   try {
@@ -149,10 +178,61 @@ const products = async(req,res)=>{
 }
   
 
+const productDetails = async (req, res) => {
+    
+  try {
+
+      const id = req.query.id;
+
+      const categoryData = await category.find({ is_listed: true });      //  Category
+
+      const productData = await product.findOne({ _id: id });     //  Product
+      console.log(productData)
+
+      const productRecom= await product.find({category:productData.category}).populate('category')
+
+      console.log(productRecom);
+       {
+          
+        
+
+          res.render("users/productDetails", { categoryData , productData,productRecom});
+
+      }
+      
+  } catch (error) {
+
+      console.log(error.message);
+      
+  }
+
+}
+
+const loadAuth = (req, res) => {
+  res.render('auth');
+}
+
+const successGoogleLogin = (req , res) => { 
+if(!req.user) 
+  res.redirect('/failure'); 
+  console.log(req.user);
+res.send("Welcome " + req.user.email); 
+}
+
+const failureGoogleLogin = (req , res) => { 
+res.send("Error"); 
+}
+
   
   module.exports = {
     register_user,
     login_user,
     verify_otp,
     products,
+    productDetails,
+    resend_otp,
+    loadAuth,
+    successGoogleLogin,
+    failureGoogleLogin
+
   };
