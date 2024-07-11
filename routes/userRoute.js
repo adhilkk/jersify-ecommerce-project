@@ -1,4 +1,5 @@
 const express = require('express');
+require('dotenv').config();
 const user_router = express()
 const user_Controller= require('../controllers/userController');
 const passport = require('passport')
@@ -6,7 +7,10 @@ require('../passport')
 
 user_router.use(passport.initialize())
 user_router.use(passport.session())
-require('dotenv').config();
+
+
+
+
 
 
 const bodyParser = require("body-parser");

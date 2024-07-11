@@ -9,8 +9,9 @@ const  session = require('express-session')
 const User = require("./models/userModel");
 
 
-require('dotenv').config();
-
+const dotenv = require('dotenv');
+dotenv.config({ path: 'config.env' });
+console.log(process.env.CLIENT_ID,'df')
 const app = express();
 
 // Middleware
@@ -69,7 +70,7 @@ const Admin = require('./models/adminModel');
 const bcryptjs = require("bcryptjs");
 
  
-
+console.log(process.env.CLIENT_ID)
 app.get('/qqqq', async (req, res) => {
   const securePassword = async (password) => {
     try {

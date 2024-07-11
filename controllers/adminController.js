@@ -4,7 +4,8 @@ const bcrypt = require("bcryptjs");
 const Category = require("../models/categoryModel")
 const categoryController= require('../controllers/categoryController');
 
-
+const dotenv = require('dotenv');
+dotenv.config({ path: 'config.env' });
 
 
 // load userlist to dashboard

@@ -5,10 +5,8 @@ const product = require("../models/product")
 const category = require("../models/categoryModel")
 const bcryptjs = require("bcryptjs");
 const nodemailer = require('nodemailer');
-
 // In-memory storage for OTPs and user data
 const otpStorage = {};
-
 
 const transporter = nodemailer.createTransport({
   service: 'gmail',
