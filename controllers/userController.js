@@ -135,6 +135,38 @@ const resend_otp = async (req, res) => {
   }
 };
 
+const loadLogin = async (req , res) => {
+
+  try {
+
+    if(req.session.user){
+
+      res.redirect('/')
+
+    } else {
+
+      res.render('users/login')
+
+    }
+    
+  } catch (error) {
+    
+  }
+
+}
+
+const loadShop = async (req , res) => {
+
+
+    try {
+
+      res.render('users/product')
+      
+    } catch (error) {
+      
+    }
+
+}
 
 const login_user = async (req, res) => {
   try {
@@ -144,16 +176,18 @@ const login_user = async (req, res) => {
 
       if (!userData || !(await bcryptjs.compare(password, userData.password))) {
           // Invalid email or password
-          return res.render('users/login', { error: 'Invalid email or password' });
+          res.redirect('/users/login', { error: 'Invalid email or password' });
       }
 
       if (userData.is_blocked) {
           // User is blocked
-          return res.render('users/login', { error: 'Your account is blocked. Please contact support.' });
+           res.redirect('/users/login', { error: 'Your account is blocked. Please contact support.' });
       }
 
       // Handle successful login
-      res.render('users/home1'); // Adjust the redirect as needed
+      console.log(userData);
+      req.session.user = userData
+      res.redirect('/'); // Adjust the redirect as needed
 
   } catch (error) {
       res.status(400).send(error.message);
@@ -221,6 +255,50 @@ const failureGoogleLogin = (req , res) => {
 res.send("Error"); 
 }
 
+const loadHome = async (req , res) => {
+  
+  try {
+
+    if(req.session.user){
+
+      res.render('users/home' , {login : req.session.user})
+
+    } else {
+
+      res.render('users/home')
+
+    }
+    
+  } catch (error) {
+
+    console.log(error.message);
+    
+  }
+
+}
+
+const loadLogout = async (req , res) => {
+
+  try {
+
+    if(req.session.user){
+
+      req.session.user = undefined
+      res.redirect('/login')
+
+    } else {
+
+      res.redirect('/')
+
+    }
+
+  } catch (error) {
+
+    console.log(error.message);
+    
+  }
+
+}
   
   module.exports = {
     register_user,
@@ -231,6 +309,10 @@ res.send("Error");
     resend_otp,
     loadAuth,
     successGoogleLogin,
-    failureGoogleLogin
+    failureGoogleLogin,
+    loadHome,
+    loadLogin,
+    loadLogout,
+    loadShop
 
-  };
+  }

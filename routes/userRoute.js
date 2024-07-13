@@ -10,7 +10,8 @@ user_router.use(passport.session())
 
 
 
-
+user_router.set('view engine', 'ejs');
+// user_router.set('views','../views/users')
 
 
 const bodyParser = require("body-parser");
@@ -27,19 +28,27 @@ const userAuth = require('../middleware/userAuth')
 
 
 
-user_router.get('/', (req, res) => {
-  res.render('home', { title: 'Home' });
-});
+// user_router.get('/', (req, res) => {
+//   res.render('users/home', { title: 'Home' });
+// });
 
-user_router.get('/login', (req, res) => {
-  res.render('../views/users/login.ejs', { title: 'Login' });
-});
+user_router.get('/' , user_Controller.loadHome)
+
+user_router.get('/login' , user_Controller.loadLogin)
+
+user_router.post('/logout' , user_Controller.loadLogout)
+
+user_router.get('/shop' , user_Controller.loadShop)
+
+// user_router.get('/login', (req, res) => {
+//   res.render('../views/users/login.ejs', { title: 'Login' });
+// });
 user_router.get('/register', (req, res) => {
   res.render('../views/users/register.ejs', { title: 'register' });
 });
-// user_router.get('/shop', (req, res) => {
-//   res.render('../views/users/shop.ejs', { title: 'Login' });
-// });
+user_router.get('/shop', (req, res) => {
+  res.render('../views/users/shop.ejs', { title: 'Login' });
+});
 user_router.get('/wishlist', (req, res) => {
   res.render('../views/users/wishlist.ejs', { title: 'Login' });
 });

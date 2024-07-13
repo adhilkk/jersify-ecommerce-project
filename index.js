@@ -1,6 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const bodyParser = require('body-parser');
+
 const path = require('path')
 const userRouter = require('./routes/userRoute');
 const adminRouter = require('./routes/adminRoute');
@@ -15,8 +15,8 @@ console.log(process.env.CLIENT_ID,'df')
 const app = express();
 
 // Middleware
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
 app.use('css', express.static(path.join(__dirname, 'public/assets/css')));
 
 app.use('js', express.static(path.join(__dirname, 'public/assets/js')));
@@ -37,6 +37,7 @@ app.use(session({
 
 // View Engine
 app.set('view engine', 'ejs');
+// app.set('views','../views/users')
 
 // Database connection
 mongoose.connect('mongodb://localhost:27017/jersify')
@@ -46,22 +47,25 @@ mongoose.connect('mongodb://localhost:27017/jersify')
 const user_routes = require("./routes/userRoute");
 
 app.use('/api',user_routes)
+
 // Routes
-app.get('/', (req, res) => {
-  res.render('users/home.ejs')
-});
+
+// app.get('/', (req, res) => {
+//   res.render('users/home.ejs')
+// });
+
 app.get('/cart', (req, res) => {
     res.render('users/cart.ejs')
   });
   
 //
 const indexRoute = require('./routes/userRoute');
-app.use('/', indexRoute); 
+// app.use('/', indexRoute); 
 
 
 //user login 
-app.use('/users', userRouter);
-app.use('/admin', adminRouter);
+// app.use('/', userRouter);
+// app.use('/admin', adminRouter);
 
 
 //admin sign up
@@ -105,7 +109,7 @@ app.get('/qqqq', async (req, res) => {
 //blocckingg
 
 app.use(express.static('public')); // To serve static files like CSS, JS, images
-app.use('/', adminRouter);
+app.use('/admin', adminRouter);
 app.use('/', userRouter);
 
 
