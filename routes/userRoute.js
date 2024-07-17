@@ -2,6 +2,9 @@ const express = require('express');
 require('dotenv').config();
 const user_router = express()
 const user_Controller= require('../controllers/userController');
+const cart_controller= require('../controllers/cartController');
+const profile_controller= require('../controllers/userprofile');
+const address_controller= require('../controllers/addressController');
 const passport = require('passport')
 require('../passport')
 
@@ -97,6 +100,64 @@ user_router.get('/success' , user_Controller.successGoogleLogin);
 
 // failure 
 user_router.get('/failure' , user_Controller.failureGoogleLogin);
+
+
+
+
+
+//__________ user profile 
+user_router.get('/profile',profile_controller.profileLoad)
+
+// edit user profile 
+user_router.post('/editProfile',profile_controller.editProfile)
+// change password
+user_router.post('/editPassword',profile_controller.passCange)
+
+
+
+// aadd address show 
+user_router.get('/Address',address_controller.loadAddress)
+// add post 
+user_router.post('/addAddress',address_controller.addAddress)
+// delete address 
+user_router.post('/deleteAdd',address_controller.deleteAddress)
+
+user_router.put("/editAddress", address_controller.editAddress);
+// edit address update
+user_router.post("/verifyEditAddress", address_controller.verifyEditAddress);
+
+// cart load
+user_router.get('/cart',cart_controller.cart)
+
+// add cart
+user_router.post('/addCart',cart_controller.addCart)
+
+//cart edit
+
+user_router.put('/cartUpdate' , cart_controller.cartEdit)
+
+//  deleteCart 
+user_router.put('/deleteCart' , cart_controller.deleteCart);
+
+//  Cart Count (post)
+user_router.post("/cartAction", user_Controller.cartAction);
+
+
+//  Price Filter (put)
+user_router.put('/priceFilter', user_Controller.priceFilter);
+
+//  SortProName (put)
+user_router.put("/aAzZ", user_Controller.aAzZ);
+
+//  SortProName (put)
+user_router.put("/zZaA", user_Controller.zZaA);
+
+//  lowTohigh (put)
+user_router.put("/lowToHigh", user_Controller.lowToHigh);
+
+//  highTolow (put)
+user_router.put('/highTolow', user_Controller.highTolow);
+
 
 
 

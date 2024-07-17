@@ -104,9 +104,10 @@ const addProducts = async (req, res) => {
 const loadeditProduct = async (req, res) => {
   try {
     const productId = req.query.id;
+    const listcategory = await Category.find({ is_listed: true });
     const productsData = await Products.findById({ _id: productId });
     console.log(productsData._id)
-    res.render("admin/productEdit", { productsData });
+    res.render("admin/productEdit", { productsData,listcategory });
   } catch (error) {}
 };
 
@@ -138,8 +139,12 @@ const editProduct = async (req, res) => {
 try {
   console.log("hiii edit product")
   console.log(req.files);
+  
     const produt= await Products.findOne({_id:req.params.id});
-    const {product,price,Discountprice,stock,description}=req.body
+    const {product,price,Discountprice,stock,description,category}=req.body;
+    console.log(category,"cat")
+    const categories = await Category.findOne({ name: category });
+    console.log(categories,"cat2")
 
 console.log(product);
 
@@ -159,7 +164,7 @@ for (let i = 0; i < 3; i++) {
 
     const offerPorice = Math.round((price / 100) * (100 - Discountprice));
 
-    await Products.findOneAndUpdate({_id:req.params.id},{$set:{name:product,price:price,discount:Discountprice,stock:stock,description:description,image:imag , dis_price : offerPorice}})
+    await Products.findOneAndUpdate({_id:req.params.id},{$set:{name:product,price:price,discount:Discountprice,stock:stock,description:description,image:imag , dis_price : offerPorice,category:category}})
     produt.save()
     res.redirect('/admin/products')
     

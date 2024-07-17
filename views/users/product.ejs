@@ -243,15 +243,91 @@
                             </ul>
                         </nav>
                     </div><!-- End .col-lg-9 -->
+
                     <aside class="col-lg-3 order-lg-first">
+
                         <div class="sidebar sidebar-shop">
+
                             <div class="widget widget-clean">
+
                                 <label>Filters:</label>
-                                <a href="#" class="sidebar-filter-clear" onclick="clean()">Clean All</a>
+                                <a href="#" class="sidebar-filter-clear" onclick="cleanFilters()" id="clean">Clean All</a>
+
                             </div><!-- End .widget widget-clean -->
 
+                            <div class="widget widget-collapsible">
+                                
+                                <h3 class="widget-title">
+                                    <a data-toggle="collapse" href="#widget-1" role="button" aria-expanded="true" aria-controls="widget-1">
+                                        Category
+                                    </a>
+                                </h3><!-- End .widget-title -->
 
+                                <div class="collapse show" id="widget-1">
 
+                                    <div class="widget-body">
+                                        <div class="filter-items filter-items-count">
+                                            <div class="filter-item">
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" class="custom-control-input" id="cat-1">
+                                                    <label class="custom-control-label" for="cat-1">Men's</label>
+                                                </div><!-- End .custom-checkbox -->
+                                                <span class="item-count">0</span>
+                                            </div><!-- End .filter-item -->
+                                            <div class="filter-item">
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" class="custom-control-input" id="cat-2">
+                                                    <label class="custom-control-label" for="cat-2">Women's</label>
+                                                </div><!-- End .custom-checkbox -->
+                                                <span class="item-count">0</span>
+                                            </div><!-- End .filter-item -->
+                                        </div><!-- End .filter-items -->
+                                    </div><!-- End .widget-body -->
+                                </div><!-- End .collapse -->
+
+                            </div><!-- End .widget -->
+
+                            <!-- <div class="widget widget-collapsible">
+                                <h3 class="widget-title">
+                                    <a data-toggle="collapse" href="#widget-2" role="button" aria-expanded="true" aria-controls="widget-2">
+                                        Size
+                                    </a>
+                                </h3>End .widget-title
+
+                                <div class="collapse show" id="widget-2">
+                                    <div class="widget-body">
+                                        <div class="filter-items">
+                                            <div class="filter-item">
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" class="custom-control-input" id="size-3">
+                                                    <label class="custom-control-label" for="size-3">6</label>
+                                                </div>End .custom-checkbox
+                                            </div>End .filter-item
+
+                                            <div class="filter-item">
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" class="custom-control-input" id="size-4">
+                                                    <label class="custom-control-label" for="size-4">7</label>
+                                                </div>End .custom-checkbox
+                                            </div>End .filter-item
+
+                                            <div class="filter-item">
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" class="custom-control-input" id="size-5">
+                                                    <label class="custom-control-label" for="size-5">8</label>
+                                                </div>End .custom-checkbox
+                                            </div>End .filter-item
+
+                                            <div class="filter-item">
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" class="custom-control-input" id="size-6">
+                                                    <label class="custom-control-label" for="size-6">9</label>
+                                                </div>End .custom-checkbox
+                                            </div>End .filter-item
+                                        </div>End .filter-items
+                                    </div>End .widget-body
+                                </div>End .collapse
+                            </div>End .widget -->
 
                             <!-- <div class="widget widget-collapsible">
                                 <h3 class="widget-title">
@@ -277,50 +353,53 @@
                             </div>End .widget -->
 
                             
+
                             <div class="widget widget-collapsible">
                                 <h3 class="widget-title">
-                                    <a data-toggle="collapse" href="#widget-1" role="button" aria-expanded="true" aria-controls="widget-1">
-                                       Sort By
+                                    <a data-toggle="collapse" href="#widget-4" role="button" aria-expanded="true" aria-controls="widget-4">
+                                        Brand
                                     </a>
                                 </h3><!-- End .widget-title -->
-                                <div class="collapse show" id="widget-1">
+
+                                <div class="collapse show" id="widget-4">
                                     <div class="widget-body">
-                                        <div class="filter-items filter-items-count">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="flexRadioDefault" id="lowTohigh" onclick="lowTohigh()">
-                                                <label class="form-check-label" for="flexRadioDefault1">
-                                                   Price Low to High
-                                                </label>
-                                              </div>
-                                              <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="flexRadioDefault" id="highTolow" onclick="highTolow()">
-                                                <label class="form-check-label" for="flexRadioDefault2">
-                                                 Price High to Low
-                                                </label>
-                                              </div>
+                                        <div class="filter-items">
 
-                                              <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="flexRadioDefault" id="abc" onclick="acendingLetter()">
-                                                <label class="form-check-label" for="flexRadioDefault2">
-                                                 aA-zZ
-                                                </label>
-                                              </div>
+                                            <div class="filter-item">
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" class="custom-control-input" id="brand-1">
+                                                    <label class="custom-control-label" for="brand-1">Nike</label>
+                                                </div><!-- End .custom-checkbox -->
+                                            </div><!-- End .filter-item -->
 
-                                              <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="flexRadioDefault" id="zyx" onclick="decsendingLetter()">
-                                                <label class="form-check-label" for="flexRadioDefault2">
-                                                 zZ-aA
-                                                </label>
-                                              </div>
+                                            <div class="filter-item">
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" class="custom-control-input" id="brand-2">
+                                                    <label class="custom-control-label" for="brand-2">Addidas</label>
+                                                </div><!-- End .custom-checkbox -->
+                                            </div><!-- End .filter-item -->
+
+                                            <div class="filter-item">
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" class="custom-control-input" id="brand-3">
+                                                    <label class="custom-control-label" for="brand-3">Puma</label>
+                                                </div><!-- End .custom-checkbox -->
+                                            </div><!-- End .filter-item -->
+
+                                            <div class="filter-item">
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" class="custom-control-input" id="brand-4">
+                                                    <label class="custom-control-label" for="brand-4">New Balance</label>
+                                                </div><!-- End .custom-checkbox -->
+                                            </div><!-- End .filter-item -->
+                                            
                                         </div><!-- End .filter-items -->
                                     </div><!-- End .widget-body -->
                                 </div><!-- End .collapse -->
                             </div><!-- End .widget -->
 
-
-                        
-
                             <div class="widget widget-collapsible">
+                                
                                 <h3 class="widget-title">
                                     <a data-toggle="collapse" href="#widget-5" role="button" aria-expanded="true" aria-controls="widget-5">
                                         Price
@@ -328,8 +407,11 @@
                                 </h3><!-- End .widget-title -->
 
                                 <div class="collapse show" id="widget-5">
+
                                     <div class="widget-body">
+
                                     <div class="filter-price">
+
                                         <div class="filter-price-text">
                                             Price Range:
                                             <span id="filter-price-range"></span>
@@ -344,16 +426,82 @@
                                         </div><!-- End .price-inputs -->
                                         
                                         <div id="price-slider"></div><!-- End #price-slider -->
+
                                     </div><!-- End .filter-price -->
                         
                                     <div class="submit-button">
-                                        <button type="submit" class="rounded-pill bg-dark  border-0 px-4 text-white" onclick="priceFilter()">Apply</button>
+                                        <button type="submit" class="rounded-pill bg-dark border-0 px-3 text-white" onclick="priceFilter()">Apply</button>
                                     </div><!-- End .submit-button -->
 
                                 </div><!-- End .widget-body -->
                                 </div><!-- End .collapse -->
+
                             </div><!-- End .widget -->
-                            
+
+                            <div class="widget widget-collapsible">
+
+                                <h3 class="widget-title">
+
+                                    <a data-toggle="collapse" href="#widget-5" role="button" aria-expanded="true" aria-controls="widget-5">
+                                        Sort Items
+                                    </a>
+
+                                </h3><!-- End .widget-title -->
+
+                                <div class="collapse show" id="widget-5">
+
+                                    <div class="widget-body">
+
+                                    <div class="filter-price">
+
+                                        <div class="form-check">
+                                            
+                                        <input class="form-check-input" type="radio" name="flexRadioDefault" onclick="aAzZ()" id="aAzZ">
+
+                                        <label class="form-check-label" for="flexRadioDefault1">
+                                            aA - zZ
+                                        </label>
+
+                                        </div>
+
+                                        <div class="form-check">
+                                            
+                                        <input class="form-check-input" type="radio" name="flexRadioDefault" onclick="zZaA()" id="zZaA">
+
+                                        <label class="form-check-label" for="flexRadioDefault1">
+                                            zZ - aA
+                                        </label>
+
+                                        </div>
+
+                                        <div class="form-check">
+
+                                        <input class="form-check-input" type="radio" name="flexRadioDefault" onclick="lowTohigh()" id="lowTohigh">
+
+                                        <label class="form-check-label" for="flexRadioDefault1">
+                                            Low to High
+                                        </label>
+
+                                        </div>
+
+                                        <div class="form-check">
+
+                                        <input class="form-check-input" type="radio" name="flexRadioDefault" onclick="highTolow()" id="highTolow">
+
+                                        <label class="form-check-label" for="flexRadioDefault2">
+                                            High to Low
+                                        </label>
+
+                                        </div>
+
+                                    </div><!-- End .filter-price -->
+
+                                </div><!-- End .widget-body -->
+
+                                </div><!-- End .collapse -->
+
+                            </div><!-- End .widget -->
+
                         </div><!-- End .sidebar sidebar-shop -->
                     </aside><!-- End .col-lg-3 -->
                 </div><!-- End .row -->
@@ -362,18 +510,19 @@
     </main><!-- End .main -->
 
     <!-- Connect Footer -->
-
+ 
     <!-- Connect Footer -->
     
 </div>
 
-    <button id="scroll-top" title="Back to Top"><i class="icon-arrow-up"></i></button>
+<button id="scroll-top" title="Back to Top"><i class="icon-arrow-up"></i></button>
 
-    <!--Connect Mobaile View-->
-   
-    <!--Connect Mobaile View-->
+<!--Connect Mobaile View-->
+<%- include('../layouts/mobileView.ejs') %>
+<!--Connect Mobaile View-->
 
 <!-- Plugins JS File -->
+</script>
 <script src="assets/js/jquery.min.js"></script>
 <script src="assets/js/bootstrap.bundle.min.js"></script>
 <script src="assets/js/jquery.hoverIntent.min.js"></script>
@@ -383,4 +532,711 @@
 <!-- Main JS File -->
 <script src="assets/js/main.js"></script>
 
-        <%- include('../layouts/footer1.ejs')-%>
+<script>
+
+//  Add Cart
+
+function addCart(id , user){
+
+if(user == 'false'){
+
+    window.location.href = '/login'
+
+} else {
+
+    fetch(`/addCart?id=${id}` , {method : 'post'})
+
+    .then(res => res.json())
+
+        .then(data =>{
+
+            cartAction();	//	Cart Count
+            
+            if(data.exist){
+                    
+                const Toast = Swal.mixin({
+
+                    toast: true,
+                    position: "top-end",
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+
+                    didOpen: (toast) => {
+
+                        toast.onmouseenter = Swal.stopTimer;
+                        toast.onmouseleave = Swal.resumeTimer;
+                    }
+
+                });
+                
+                Toast.fire({
+
+                    icon: "warning",
+                    title: "Already Added"
+
+                });
+
+            }else if(data.success){
+                            
+                const Toast = Swal.mixin({
+
+                    toast: true,
+                    position: "top-end",
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+
+                    didOpen: (toast) => {
+                        toast.onmouseenter = Swal.stopTimer;
+                        toast.onmouseleave = Swal.resumeTimer;
+                    }
+                });
+
+                Toast.fire({
+
+                    icon: "success",
+                    title: "Added TO Cart"
+                    
+                });
+            }
+
+
+        })
+
+}
+
+};
+
+//  Search :-
+
+function search(val){
+
+    const cards = document.getElementById('cards')
+    const result = document.getElementById('result')
+
+    //sending the value to back
+
+    fetch('/searchProduct',{
+
+        method:'put',
+
+        headers:{'Content-Type':'application/json'},
+
+    body:JSON.stringify({items:val.value})})
+    
+    //after the result
+
+    .then(res => res.json())
+
+    .then(data =>{
+
+        if(data.length==0){
+
+            result.innerHTML='Could not find that product'
+            result.classList.add('text-danger')
+            result.classList.add('justify-content-center')
+
+        }else{
+
+            result.classList.remove('justify-content-center')
+
+            result.innerHTML= `${data.map((product,i) => (`
+                
+            <div id="cards"class="col-6 col-md-4 col-lg-4">
+                
+            <div class="product product-7 text-center">
+                
+            <figure class="product-media">
+
+                <a href='/productDetails?id=${product._id}'>
+                    <img src="/productImage/${product.image[0]}" alt="Product image" class="product-image">
+                </a>
+
+                <div class="product-action-vertical">
+                    <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to wishlist</span></a>
+                </div><!-- End .product-action-vertical -->
+
+                <input hidden value="${product.stock}" id="stock">
+
+                <div class="product-action">
+                    <button onclick="addCart('${product._id}')" id="btns" class="btn-product btn-cart border-0 " style="cursor: pointer;"><span id="crt">add to cart</span></button>
+                </div><!-- End .product-action -->
+
+            </figure><!-- End .product-media -->
+
+            <div class="product-body">
+
+                <div class="product-cat">
+                    <a href="#">${product.name}</a>
+                </div><!-- End .product-cat -->
+
+                <h3 class="product-title"><a href="/products">${product.category.name}</a></h3><!-- End .product-title -->
+
+                <div class="product-price">
+                    $${product.price}.00
+                </div><!-- End .product-price -->
+
+                <div class="ratings-container">
+
+                    <div class="ratings">
+                        <div class="ratings-val" style="width: 20%;"></div><!-- End .ratings-val -->
+                    </div><!-- End .ratings -->
+
+                </div><!-- End .rating-container -->
+
+            </div><!-- End .product-body -->
+
+        </div><!-- End .product -->
+
+    </div>
+
+        `)).join('')}`
+
+    }
+
+});
+
+};
+
+//	Price Filter :-
+
+function priceFilter(){
+
+const min = document.getElementById('min-price').value
+const max = document.getElementById('max-price').value
+
+const result = document.getElementById('result')
+const disErr = document.getElementById('disErr')
+
+fetch(`/priceFilter` , {method : 'put' , headers : {'Content-Type':'application/json'} , body : JSON.stringify({min , max})})
+
+.then(res => (res.json()))
+
+.then(data => {
+
+    if(data.fail == 'failed'){
+        
+        disErr.textContent = 'Put Price!!!'
+
+    } else if(data.success.length == 0) {
+        
+        result.innerHTML='Could not find that product'
+        result.classList.add('text-danger')
+        result.classList.add('justify-content-center')
+
+    } else {
+
+        disErr.innerHTML = ''
+
+        result.classList.remove('justify-content-center')
+
+        result.innerHTML= `${data.success.map((product,i) => (`
+                
+            <div id="cards"class="col-6 col-md-4 col-lg-4">
+                
+            <div class="product product-7 text-center">
+                
+            <figure class="product-media">
+
+                <a href='/productDetails?id=${product._id}'>
+                    <img src="/productImage/${product.image[0]}" alt="Product image" class="product-image">
+                </a>
+
+                <div class="product-action-vertical">
+                    <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to wishlist</span></a>
+                </div><!-- End .product-action-vertical -->
+
+                <input hidden value="${product.stock}" id="stock">
+
+                <div class="product-action">
+                    <button onclick="addCart('${product._id}')" id="btns" class="btn-product btn-cart border-0 " style="cursor: pointer;"><span id="crt">add to cart</span></button>
+                </div><!-- End .product-action -->
+
+            </figure><!-- End .product-media -->
+
+            <div class="product-body">
+
+                <div class="product-cat">
+                    <a href="#">${product.name}</a>
+                </div><!-- End .product-cat -->
+
+                <h3 class="product-title"><a href="/products">${product.category.name}</a></h3><!-- End .product-title -->
+
+                <div class="product-price">
+                    $${product.price}.00
+                </div><!-- End .product-price -->
+
+                <div class="ratings-container">
+
+                    <div class="ratings">
+                        <div class="ratings-val" style="width: 20%;"></div><!-- End .ratings-val -->
+                    </div><!-- End .ratings -->
+
+                </div><!-- End .rating-container -->
+
+            </div><!-- End .product-body -->
+
+        </div><!-- End .product -->
+
+    </div>
+
+        `)).join('')}`
+
+    }
+
+
+})
+
+
+}
+
+//  Add Wishlist
+
+function addWishlist(id){
+
+fetch(`/addWishlist?id=${id}` , {method : 'POST'})
+
+.then(res => res.json()) 
+
+.then(data => {
+
+   if(data.suc){
+
+        const Toast = Swal.mixin({
+
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+
+            didOpen: (toast) => {
+
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+
+        });
+          
+        Toast.fire({
+
+            icon: "warning",
+            title: "Already Added"
+
+        });
+
+    } else if(data.succ){
+
+        const Toast = Swal.mixin({
+
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+
+        });
+
+        Toast.fire({
+
+            icon: "success",
+            title: "Added TO Wishlist"
+                
+        });
+
+
+    }
+
+})
+
+};
+
+//	aA zZ Pro Name :-
+
+function aAzZ(){
+
+const item = document.getElementById('aAzZ');
+const result = document.getElementById('result')
+
+const status = true
+
+if(item.checked){
+
+    fetch(`/aAzZ` , {method : 'put' , headers:{'Content-Type':'application/json'} , body : JSON.stringify({status})})
+
+    .then(res => res.json())
+
+    .then(data => {
+
+        if(data){
+
+              result.classList.remove('justify-content-center')
+
+                result.innerHTML= `${data.map((product,i) => (`
+                    
+                    <div id="cards"class="col-6 col-md-4 col-lg-4">
+                        
+                    <div class="product product-7 text-center">
+                        
+                    <figure class="product-media">
+
+                        <a href='/productDetails?id=${product._id}'>
+                            <img src="/productImage/${product.image[0]}" alt="Product image" class="product-image">
+                        </a>
+
+                            <span class="product-label label-new">New</span>
+
+                        <div class="product-action-vertical">
+                            <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to wishlist</span></a>
+                        </div><!-- End .product-action-vertical -->
+
+                        <input hidden value="${product.stock}" id="stock">
+
+                        <div class="product-action">
+                            <button onclick="addCart('${product._id}')" id="btns" class="btn-product btn-cart border-0 " style="cursor: pointer;"><span id="crt">add to cart</span></button>
+                        </div><!-- End .product-action -->
+
+                    </figure><!-- End .product-media -->
+
+                    <div class="product-body">
+
+                        <div class="product-cat">
+                            <a href="#">${product.name}</a>
+                        </div><!-- End .product-cat -->
+
+                        <h3 class="product-title"><a href="/products">${product.category.name}</a></h3><!-- End .product-title -->
+
+                        <div class="product-price">
+                            $${product.price}.00
+                        </div><!-- End .product-price -->
+
+                        <div class="ratings-container">
+
+                                                    <div class="ratings">
+
+                                                        <div class="ratings-val" style="width: 20%;"></div>
+
+                                                    </div><!--End .ratings-->
+                                                    
+                                                    <span class="ratings-text">( 2 Reviews )</span>
+
+                                                </div><!--End .rating-container-->
+
+                    </div><!-- End .product-body -->
+
+                    </div><!-- End .product-body -->
+
+                </div><!-- End .product -->
+
+                </div>
+
+            `)).join('')}`
+
+        }
+    })
+
+} else {
+
+    $('#reloadDiv').load('/product #reloadDiv')
+    
+}
+
+};
+
+//	zZ aA Pro Name :-
+
+function zZaA(){
+
+const item = document.getElementById('zZaA');
+const result = document.getElementById('result')
+
+const status = true
+
+if(item.checked){
+
+    fetch(`/zZaA` , {method : 'put' , headers:{'Content-Type':'application/json'} , body : JSON.stringify({status})})
+
+    .then(res => res.json())
+
+    .then(data => {
+
+        if(data){
+
+              result.classList.remove('justify-content-center')
+
+                result.innerHTML= `${data.map((product,i) => (`
+                    
+                    <div id="cards"class="col-6 col-md-4 col-lg-4">
+                        
+                    <div class="product product-7 text-center">
+                        
+                    <figure class="product-media">
+
+                        <a href='/productDetails?id=${product._id}'>
+                            <img src="/productImage/${product.image[0]}" alt="Product image" class="product-image">
+                        </a>
+
+                            <span class="product-label label-new">New</span>
+
+                        <div class="product-action-vertical">
+                            <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to wishlist</span></a>
+                        </div><!-- End .product-action-vertical -->
+
+                        <input hidden value="${product.stock}" id="stock">
+
+                        <div class="product-action">
+                            <button onclick="addCart('${product._id}')" id="btns" class="btn-product btn-cart border-0 " style="cursor: pointer;"><span id="crt">add to cart</span></button>
+                        </div><!-- End .product-action -->
+
+                    </figure><!-- End .product-media -->
+
+                    <div class="product-body">
+
+                        <div class="product-cat">
+                            <a href="#">${product.name}</a>
+                        </div><!-- End .product-cat -->
+
+                        <h3 class="product-title"><a href="/products">${product.category.name}</a></h3><!-- End .product-title -->
+
+                        <div class="product-price">
+                            $${product.price}.00
+                        </div><!-- End .product-price -->
+
+                        <div class="ratings-container">
+
+                                                    <div class="ratings">
+
+                                                        <div class="ratings-val" style="width: 20%;"></div>
+
+                                                    </div><!--End .ratings-->
+                                                    
+                                                    <span class="ratings-text">( 2 Reviews )</span>
+
+                                                </div><!--End .rating-container-->
+
+                    </div><!-- End .product-body -->
+
+                    </div><!-- End .product-body -->
+
+                </div><!-- End .product -->
+
+                </div>
+
+            `)).join('')}`
+
+        }
+    })
+
+} else {
+
+    $('#reloadDiv').load('/product #reloadDiv')
+    
+}
+
+}
+
+//	Price Low to High :-
+
+function lowTohigh(){
+
+    console.log('weweweee');
+const item = document.getElementById('lowTohigh');
+const result = document.getElementById('result')
+const status = true
+
+if(item.checked){
+
+    fetch(`/lowTohigh` , {method : 'put' , headers:{'Content-Type':'application/json'} , body : JSON.stringify({status})})
+
+    .then(res => res.json())
+
+    .then(data => {
+
+        if(data){
+
+              result.classList.remove('justify-content-center')
+
+                result.innerHTML= `${data.map((product,i) => (`
+                    
+                    <div id="cards"class="col-6 col-md-4 col-lg-4">
+                        
+                    <div class="product product-7 text-center">
+                        
+                    <figure class="product-media">
+
+                        <a href='/productDetails?id=${product._id}'>
+                            <img src="/productImage/${product.image[0]}" alt="Product image" class="product-image">
+                        </a>
+
+                            <span class="product-label label-new">New</span>
+
+                        <div class="product-action-vertical">
+                            <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to wishlist</span></a>
+                        </div><!-- End .product-action-vertical -->
+
+                        <input hidden value="${product.stock}" id="stock">
+
+                        <div class="product-action">
+                            <button onclick="addCart('${product._id}')" id="btns" class="btn-product btn-cart border-0 " style="cursor: pointer;"><span id="crt">add to cart</span></button>
+                        </div><!-- End .product-action -->
+
+                    </figure><!-- End .product-media -->
+
+                    <div class="product-body">
+
+                        <div class="product-cat">
+                            <a href="#">${product.name}</a>
+                        </div><!-- End .product-cat -->
+
+                        <h3 class="product-title"><a href="/products">${product.category.name}</a></h3><!-- End .product-title -->
+
+                        <div class="product-price">
+                            $${product.price}.00
+                        </div><!-- End .product-price -->
+
+                        <div class="ratings-container">
+
+                                                    <div class="ratings">
+
+                                                        <div class="ratings-val" style="width: 20%;"></div>
+
+                                                    </div><!--End .ratings-->
+                                                    
+                                                    <span class="ratings-text">( 2 Reviews )</span>
+
+                                                </div><!--End .rating-container-->
+
+                    </div><!-- End .product-body -->
+
+                </div><!-- End .product -->
+
+                </div>
+
+            `)).join('')}`
+
+        } 
+
+    })
+
+} else {
+
+    $('#reloadDiv').load('/product #reloadDiv')
+
+}
+
+};
+
+//	Price High to Low :-
+
+function highTolow(){
+
+const item = document.getElementById('highTolow')
+const result = document.getElementById('result')
+
+const status = true
+
+if(item.checked){
+
+    fetch('/highTolow' , {method : 'put' , headers : {'Content-Type':'application/json'} , body : JSON.stringify({status})})
+
+    .then(res => res.json())
+
+    .then(data => {
+
+        if(data){
+
+              result.classList.remove('justify-content-center')
+
+                result.innerHTML= `${data.map((product,i) => (`
+                    
+                    <div id="cards"class="col-6 col-md-4 col-lg-4">
+                        
+                    <div class="product product-7 text-center">
+                        
+                    <figure class="product-media">
+
+                        <a href='/productDetails?id=${product._id}'>
+                            <img src="/productImage/${product.image[0]}" alt="Product image" class="product-image">
+                        </a>
+
+                            <span class="product-label label-new">New</span>
+
+                        <div class="product-action-vertical">
+                            <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to wishlist</span></a>
+                        </div><!-- End .product-action-vertical -->
+
+                        <input hidden value="${product.stock}" id="stock">
+
+                        <div class="product-action">
+                            <button onclick="addCart('${product._id}')" id="btns" class="btn-product btn-cart border-0 " style="cursor: pointer;"><span id="crt">add to cart</span></button>
+                        </div><!-- End .product-action -->
+
+                    </figure><!-- End .product-media -->
+
+                    <div class="product-body">
+
+                        <div class="product-cat">
+                            <a href="#">${product.name}</a>
+                        </div><!-- End .product-cat -->
+
+                        <h3 class="product-title"><a href="/products">${product.category.name}</a></h3><!-- End .product-title -->
+
+                        <div class="product-price">
+                            $${product.price}.00
+                        </div><!-- End .product-price -->
+
+                        <div class="ratings-container">
+
+                                                    <div class="ratings">
+
+                                                        <div class="ratings-val" style="width: 20%;"></div>
+
+                                                    </div><!--End .ratings-->
+                                                    
+                                                    <span class="ratings-text">( 2 Reviews )</span>
+
+                                                </div><!--End .rating-container-->
+
+                    </div><!-- End .product-body -->
+
+                </div><!-- End .product -->
+
+                </div>
+
+            `)).join('')}`
+
+        } 
+
+    })
+
+} else {
+
+    $('#reloadDiv').load('/product #reloadDiv')
+
+}
+
+}
+
+//	Clean All Filters :-
+
+function cleanFilters(){
+
+const val = true
+
+if(val == true){
+
+    $('#reloadDiv').load('/product #reloadDiv')
+
+}
+
+}
+
+</script>
+
+<%- include('../layouts/footer1') %>

@@ -299,6 +299,209 @@ const loadLogout = async (req , res) => {
   }
 
 }
+
+
+const cartAction = async (req, res) => {
+    
+  try {
+
+      if (req.session.user) {
+          
+          const userIdd = req.session.user._id;
+
+          const cartAcction = await cart.findOne({ userId: userIdd });
+
+          const val = cartAcction.product.length;
+
+          res.send({ success: val });
+
+      } else {
+
+          res.send({success : 0})
+
+      }
+     
+  } catch (error) {
+
+      console.log(error.message);
+      
+  }
+
+};
+
+
+
+
+//  Price Filter (Put Metthod) :-
+
+const priceFilter = async (req, res , next) => {
+    
+  try {
+
+      const minn = req.body.min
+      const maxx = req.body.max
+
+      if (minn && maxx) {
+              
+          const productPrice = await product.find({ $and: [{ price: { $lt: Number(maxx) } }, { price: { $gt: Number(minn) } }] }).populate('category')
+
+          if (productPrice) {
+              
+              res.send({ success: productPrice });
+
+          } else {
+
+              res.send({fail : "failed"})
+
+          }
+
+      } else {
+
+          res.send({fail : "failed"})
+
+      }
+
+  } catch (error) {
+
+      next(error,req,res);
+
+      
+  }
+
+};
+
+//===============================//
+
+//  Acending Order Product Name (Put Method) :-
+
+const aAzZ = async (req, res , next) => {
+  
+  try {
+
+      const { status } = req.body;
+
+      if (status) {
+          
+          const products = await product.find({ status: true }).sort({ name: 1 }).populate('category');
+          
+          res.send(products);
+
+      }
+      
+  } catch (error) {
+
+      next(error,req,res);
+
+      
+  }
+
+};
+
+//===============================//
+
+//  Decending Order Product Name (Put Method) :-
+
+const zZaA = async (req, res , next) => {
+  
+  try {
+
+      const { status } = req.body;
+
+      if (status) {
+          
+          const products = await product.find({ status: true }).sort({ name: -1 }).populate('category');
+
+          res.send(products);
+
+      }
+      
+  } catch (error) {
+
+      next(error,req,res);
+
+      
+  }
+
+};
+
+//===============================//
+
+//  Price Low to High (Put Method) :-
+
+const lowToHigh = async (req, res , next) => {
+  
+  try {
+
+      const { status } = req.body;
+
+      if (status) {
+          
+          const products = await product.find({ status: true }).sort({ price: 1 }).populate('category');
+
+          res.send(products)
+
+      }
+      
+  } catch (error) {
+
+      next(error,req,res);
+
+      
+  }
+
+};
+
+//===============================//
+
+//  Price High To Low (Put Method) :-
+
+const highTolow = async (req, res , next) => {
+  
+  try {
+
+      const { status } = req.body;
+
+      if (status) {
+          
+          const products = await product.find({ status: true }).sort({ price: -1 }).populate('category');
+
+          res.send(products);
+      }
+      
+  } catch (error) {
+
+      next(error,req,res);
+
+      
+  }
+
+}
+
+const catchAll = async (req, res , next) => {
+    
+  try {
+
+      const categoryData = await Category.find({ is_Listed: true });
+
+      if (req.session.user) {
+          
+          res.render('404');
+
+      } else {
+
+          res.render('404', { categoryData });
+
+      }
+      
+  } catch (error) {
+
+      next(error,req,res);
+
+      
+  }
+
+};
+
   
   module.exports = {
     register_user,
@@ -313,6 +516,13 @@ const loadLogout = async (req , res) => {
     loadHome,
     loadLogin,
     loadLogout,
-    loadShop
+    loadShop,
+    cartAction,
+    priceFilter,
+    catchAll,
+    aAzZ,
+    zZaA,
+   lowToHigh,
+    highTolow,
 
   }

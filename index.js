@@ -7,7 +7,7 @@ const adminRouter = require('./routes/adminRoute');
 const nocache = require('nocache')
 const  session = require('express-session')
 const User = require("./models/userModel");
-
+const flash = require('express-flash')
 
 const dotenv = require('dotenv');
 dotenv.config({ path: 'config.env' });
@@ -23,7 +23,10 @@ app.use('js', express.static(path.join(__dirname, 'public/assets/js')));
 app.use('/assets', express.static(path.join(__dirname, 'public/assets')));
 app.use('/asset', express.static(path.join(__dirname, 'public/asset')));
 // app.use('asset', express.static(path.join(__dirname, 'public/asset')));
+
+app.use(flash())
 app.use(nocache());
+
 app.use(express.static(path.join(__dirname, 'public')));
 app.use("/public", express.static(path.join(__dirname, 'public')));
 
@@ -49,14 +52,6 @@ const user_routes = require("./routes/userRoute");
 app.use('/api',user_routes)
 
 // Routes
-
-// app.get('/', (req, res) => {
-//   res.render('users/home.ejs')
-// });
-
-app.get('/cart', (req, res) => {
-    res.render('users/cart.ejs')
-  });
   
 //
 const indexRoute = require('./routes/userRoute');

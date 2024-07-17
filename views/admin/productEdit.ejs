@@ -95,6 +95,22 @@
                             </div>
                           </div>
                         </div>
+                        <div class="form-group">
+                          <label for="exampleInputPassword4">Category :</label><br>
+                          <select name="category" id="">
+                            <% locals.listcategory.forEach(e=>{ %>
+                             
+                              <option class="form-control " value="<%= e._id  %>" <%= (e._id.toString() === productsData.category.toString()) ? 'selected' : '' %> >
+                                
+                                <%=e.name %>
+                              </option>
+    
+                              <% }) %>
+                          </select>
+                        </div>
+
+
+
 
 
                       </div>
