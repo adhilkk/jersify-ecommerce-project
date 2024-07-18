@@ -3,6 +3,7 @@ const admin_router = express();
 const adminController = require("../controllers/adminController");
 const categoryController = require("../controllers/categoryController");
 const productController = require("../controllers/productController");
+const admin_order = require('../controllers/adminOrderController')
 const path = require("path");
 
 const bodyParser = require("body-parser");
@@ -25,7 +26,7 @@ const storage = multer.diskStorage({
     cb(null, name);
   },
 });
-
+ 
 const upload = multer({
   storage: storage,
 
@@ -84,5 +85,18 @@ admin_router.post(
 );
 admin_router.get("/products", productController.loadProducts);
 admin_router.get("/products", productController.loadProducts);
+
+
+//  Admin Orders List (get)
+admin_router.get('/orders',admin_order.loadOrderss);
+
+//  Admin Orders Details (post)
+admin_router.get('/ordDetails', admin_order.ordersDetails);
+
+//  Admin OrderStatus Handling (put)
+admin_router.put("/orderStatusHandling", admin_order.orderProstatus);
+
+admin_router.post("/retordmanage",admin_order.returnorderManage)
+
 
 module.exports = admin_router;

@@ -64,9 +64,11 @@
             
 
             <div class="header-right">
+                <% if(locals.login) { %>
                 <a href="/profile" class="logo" style="padding-right: 10px;">
                     <i class="fa-solid fa-user"></i>
                 </a>
+                <% } %>
 
                 <div class="header-search">
                     
@@ -112,7 +114,7 @@
 
             cartt.textContent = data.success || 0
 
-            console.log(data.success,cartt );
+            
         })
 
     };

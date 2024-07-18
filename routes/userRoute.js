@@ -5,6 +5,8 @@ const user_Controller= require('../controllers/userController');
 const cart_controller= require('../controllers/cartController');
 const profile_controller= require('../controllers/userprofile');
 const address_controller= require('../controllers/addressController');
+const checkoutController= require('../controllers/checkoutController');
+const orderController= require('../controllers/orderController');
 const passport = require('passport')
 require('../passport')
 
@@ -147,6 +149,8 @@ user_router.post("/cartAction", user_Controller.cartAction);
 user_router.put('/priceFilter', user_Controller.priceFilter);
 
 //  SortProName (put)
+user_router.put("/newArrivals", user_Controller.newArrivals);
+//  SortProName (put)
 user_router.put("/aAzZ", user_Controller.aAzZ);
 
 //  SortProName (put)
@@ -159,6 +163,48 @@ user_router.put("/lowToHigh", user_Controller.lowToHigh);
 user_router.put('/highTolow', user_Controller.highTolow);
 
 
+
+
+//  Orders Section :-
+
+//  load Orders (get)
+user_router.get('/orders',  orderController.loadOrder);
+
+//  orderDetails (get)
+user_router.get("/orderDetails",  orderController.orderView);
+
+//  Order Kitty (post)
+user_router.post('/getOrder', orderController.orderKitty);
+
+//  thanksPage (get)
+user_router.get('/thanks', orderController.loadThanks);
+
+//  cancelOrder (post)
+user_router.post('/cancelOrd', orderController.orderCancel);
+
+//  returnOrder (post)
+user_router.put('/returnOrd', orderController.returnOrd);
+
+
+
+
+
+//  CheckOut Section :-
+
+//  checkout (get)
+user_router.get('/checkout',checkoutController.loadCheckout);
+
+//  verifychekout Add Address (post)
+user_router.post("/verifyChekutAdss", checkoutController.verifyCheckOutAddress);
+
+//  editAddressCheckout (put)
+user_router.put("/editAddressCheckout", checkoutController.editAddress);
+
+//  verifyEditAddressCheckout (post)
+user_router.post('/verifyEditAddCheckout', checkoutController.verifyEditAddress);
+
+//  deleteAddress (post)
+user_router.post('/deleteCheckAdd', checkoutController.deleteAdd);
 
 
 module.exports = user_router;

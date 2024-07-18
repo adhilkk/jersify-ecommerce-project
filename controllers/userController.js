@@ -94,7 +94,7 @@ const verify_otp = async (req, res) => {
 
     if (currentTime - tempUser.otpTimestamp > otpValidDuration) {
       return res.render('users/otp', { otpMsg: 'OTP has expired', email: email });
-    }
+    } 
 
     if (tempUser.otp === otp) {
       const newUser = new User({
@@ -197,13 +197,13 @@ const login_user = async (req, res) => {
 
 const products = async(req,res)=>{
   try {
-
+      const login = req.session.user
       const producDataa = await product.find({status :true}).populate('category')
       // console.log(producData);
       const categoryData = await category.find({is_listed: true})
 
-      res.render('users/product' , { producData : producDataa,categoryData})
-
+      res.render('users/product' , { producData : producDataa,categoryData,login})
+    
   } catch (error) {
       console.log(error.message);
   }
@@ -244,19 +244,37 @@ const loadAuth = (req, res) => {
   res.render('auth');
 }
 
-const successGoogleLogin = (req , res) => { 
+const successGoogleLogin = async (req , res) => { 
 if(!req.user) 
   res.redirect('/failure'); 
   console.log(req.user);
-res.send("Welcome " + req.user.email); 
+  
+  // send data to database a
+  //check with session
+  const newUser = new User({
+    fullName: req.user.given_name,
+    email: req.user.email,
+   
+  });
+
+  const userNew = await newUser.save();
+
+  console.log(userNew._id);
+
+  if (!req.session.user) {
+    req.session.user = {};
+  }
+  req.session.user._id = userNew._id;
+  res.redirect('/'); 
 }
+
 
 const failureGoogleLogin = (req , res) => { 
 res.send("Error"); 
 }
-
-const loadHome = async (req , res) => {
   
+const loadHome = async (req , res) => {
+   
   try {
 
     if(req.session.user){
@@ -371,6 +389,33 @@ const priceFilter = async (req, res , next) => {
 };
 
 //===============================//
+
+// sort on New arrivals 
+
+const newArrivals = async (req, res, next) => {
+  try {
+      const { status, newArrival } = req.body;
+
+      let query = {};
+
+      if (status) {
+          query.status = true;
+      }
+
+      let sortOptions = { name: 1 }; // default sorting by name
+
+      if (newArrival) {
+          sortOptions = { createdAt: -1 }; // sort by createdAt in descending order
+      }
+
+      const products = await product.find(query).sort(sortOptions).populate('category');
+      res.send(products);
+  } catch (error) {
+      next(error, req, res);
+  }
+};
+
+
 
 //  Acending Order Product Name (Put Method) :-
 
@@ -524,5 +569,6 @@ const catchAll = async (req, res , next) => {
     zZaA,
    lowToHigh,
     highTolow,
+    newArrivals,
 
   }
