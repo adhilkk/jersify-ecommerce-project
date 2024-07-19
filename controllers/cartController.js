@@ -4,18 +4,18 @@ const PRODUCTS = require ('../models/product')
 const User = require ('../models/userModel')
 
 
-// load cart
+
 const cart = async ( req ,res ) => {
 
     try {
-        console.log("aaaaa");
+       
         const categoryData = await category.find({is_listed: true})
         const listedCategory = await category.find({is_listed:true})
         const userdata = await User.findById({_id:req.session.user._id})
         const userProduct = await Cart.findOne({userId : req.session.user._id}).populate('product.productId')
         const cartData = await Cart.findOne({userId : req.session.user._id});
 
-        console.log(userProduct);
+        
 
         const updateCart = userProduct.product.reduce((acc , val) => acc + val.price , 0)
 
@@ -25,7 +25,7 @@ const cart = async ( req ,res ) => {
         
         if(req.session.user){
 
-            console.log("a");
+            
 
             res.render('users/cart',{login:req.session.user,listedCategory,userProduct,userdata,categoryData , newPricee : newPrice.Total_price , msgg : msg , cartData})
 
@@ -40,29 +40,29 @@ const cart = async ( req ,res ) => {
 
 }
 
-// cart add 
+
 const addCart = async ( req , res ) => {
 
     try {
-        console.log('haaaii');
+        
 
         if(req.session.user){
             const proId = req.query.id
             const userIdd = req.session.user._id
             const quantity = req.query.qty || 1
 
-            console.log(quantity);
+            
 
         const cartProduct = await PRODUCTS.findOne({_id:proId});
 
-       console.log(cartProduct)
+       
 
         const exist= await Cart.findOne({userId:userIdd , product: {$elemMatch: {productId: proId} } } );
 
         if(!exist){
-            console.log('aaa');
+            
             const total = cartProduct.discount > 0 ? cartProduct.dis_price * quantity : cartProduct.price * quantity
-            console.log('bbb');
+           
 
            await Cart.findOneAndUpdate({userId:userIdd},
 
@@ -91,7 +91,7 @@ const addCart = async ( req , res ) => {
 
 }
 
-//edit cart fetch
+
 const cartEdit = async (req, res) => {
 
     try {
@@ -129,7 +129,7 @@ const cartEdit = async (req, res) => {
   };
  
 
-//  Delete Cart :-
+
 
 const deleteCart = async(req , res)=>{
 

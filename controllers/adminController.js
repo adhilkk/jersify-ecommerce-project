@@ -62,6 +62,11 @@ const renderLogin = (req, res) => {
       }
   
       // If email and password are correct, redirect to the dashboard
+
+      if (!req.session.admin) {
+        req.session.admin = {};
+      }
+      req.session.admin = admin._id;
       res.redirect('/admin/dashboard');
   
     } catch (error) {
@@ -69,6 +74,30 @@ const renderLogin = (req, res) => {
       res.status(500).send('Internal server error');
     }
   };
+
+  const handleLogout = async (req , res) => {
+
+    try {
+  
+      if(req.session.admin){
+  
+        req.session.admin = undefined
+        res.redirect('/admin')
+  
+      } else {
+  
+        res.redirect('/admin/dashboard')
+  
+      }
+  
+    } catch (error) {
+  
+      console.log(error.message);
+      
+    }
+  
+  }
+  
   
   const renderDashboard = (req, res) => {
     try {
@@ -149,5 +178,6 @@ module.exports= {
     getUsers,
     toggleBlockUser,
     adminCategory,
+    handleLogout,
 }
 

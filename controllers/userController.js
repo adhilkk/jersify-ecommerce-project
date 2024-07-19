@@ -1,13 +1,12 @@
-
-
 const User = require("../models/userModel")
 const product = require("../models/product")
 const category = require("../models/categoryModel")
 const bcryptjs = require("bcryptjs");
 const nodemailer = require('nodemailer');
-// In-memory storage for OTPs and user data
-const otpStorage = {};
 
+
+//  OTPs and user data
+const otpStorage = {};
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
@@ -20,9 +19,10 @@ const generateOTP = () => {
   return Math.floor(100000 + Math.random() * 900000).toString();
 };
 
+
 const sendOTP = (email, otp) => {
   const mailOptions = {
-    from: 'your-email@gmail.com', // Replace with your email
+    from: 'your-email@gmail.com',
     to: email,
     subject: 'OTP Verification',
     text: `Hello, Welcome to JERSIFY
@@ -37,6 +37,17 @@ const sendOTP = (email, otp) => {
     }
   });
 };
+
+
+const loadRegister = async (req,res)=>{
+  try {
+    res.render('users/register')
+  } catch (error) {
+    res.status(400).send(error.message);
+    
+  }
+}
+
 
 const register_user = async (req, res) => {
   const { userFullName, registerEmail, registerPhone, registerPassword, registerCpassword } = req.body;
@@ -55,15 +66,15 @@ const register_user = async (req, res) => {
   };
 
   try {
-    const spassword = await securePassword(registerPassword);
-    const otp = generateOTP();
+    const spassword = await securePassword(registerPassword); 
+    const otp = generateOTP(); 
     const otpTimestamp = Date.now();
 
     const userData = await User.findOne({ email: registerEmail });
     if (userData) {
       res.render('users/register', { registerMsg: 'Email already exists', registerSuccess: false });
     } else {
-      // Store user data, OTP, and timestamp in the in-memory object
+     
       otpStorage[registerEmail] = {
         fullName: userFullName,
         email: registerEmail,
@@ -90,7 +101,7 @@ const verify_otp = async (req, res) => {
     }
 
     const currentTime = Date.now();
-    const otpValidDuration = 60 * 1000; // 1 minute in milliseconds
+    const otpValidDuration = 60 * 1000; 
 
     if (currentTime - tempUser.otpTimestamp > otpValidDuration) {
       return res.render('users/otp', { otpMsg: 'OTP has expired', email: email });
@@ -105,8 +116,8 @@ const verify_otp = async (req, res) => {
       });
 
       await newUser.save();
-      delete otpStorage[email]; // Remove temporary user data
-      res.redirect('/login'); // Redirect to login page after successful verification
+      delete otpStorage[email]; 
+      res.redirect('/login'); 
     } else {
       res.render('users/otp', { otpMsg: 'Invalid OTP', email: email });
     }
@@ -125,9 +136,8 @@ const resend_otp = async (req, res) => {
 
     const newOTP = generateOTP();
     const otpTimestamp = Date.now();
-    tempUser.otp = newOTP; // Update the OTP in the in-memory storage
-    tempUser.otpTimestamp = otpTimestamp; // Update the OTP timestamp
-    sendOTP(email, newOTP);
+    tempUser.otp = newOTP; 
+    tempUser.otpTimestamp = otpTimestamp; 
 
     res.json({ success: true, message: 'OTP resent successfully' });
   } catch (error) {
@@ -175,19 +185,19 @@ const login_user = async (req, res) => {
       const userData = await User.findOne({ email: Email });
 
       if (!userData || !(await bcryptjs.compare(password, userData.password))) {
-          // Invalid email or password
+          
           res.redirect('/users/login', { error: 'Invalid email or password' });
       }
 
       if (userData.is_blocked) {
-          // User is blocked
+          
            res.redirect('/users/login', { error: 'Your account is blocked. Please contact support.' });
       }
 
-      // Handle successful login
+      
       console.log(userData);
       req.session.user = userData
-      res.redirect('/'); // Adjust the redirect as needed
+      res.redirect('/'); 
 
   } catch (error) {
       res.status(400).send(error.message);
@@ -199,9 +209,7 @@ const products = async(req,res)=>{
   try {
       const login = req.session.user
       const producDataa = await product.find({status :true}).populate('category')
-      // console.log(producData);
       const categoryData = await category.find({is_listed: true})
-
       res.render('users/product' , { producData : producDataa,categoryData,login})
     
   } catch (error) {
@@ -215,21 +223,11 @@ const productDetails = async (req, res) => {
   try {
 
       const id = req.query.id;
-
-      const categoryData = await category.find({ is_listed: true });      //  Category
-
-      const productData = await product.findOne({ _id: id });     //  Product
-      console.log(productData)
-
+      const categoryData = await category.find({ is_listed: true });      
+      const productData = await product.findOne({ _id: id }); 
       const productRecom= await product.find({category:productData.category}).populate('category')
-
-      console.log(productRecom);
        {
-          
-        
-
           res.render("users/productDetails", { categoryData , productData,productRecom});
-
       }
       
   } catch (error) {
@@ -249,8 +247,7 @@ if(!req.user)
   res.redirect('/failure'); 
   console.log(req.user);
   
-  // send data to database a
-  //check with session
+  
   const newUser = new User({
     fullName: req.user.given_name,
     email: req.user.email,
@@ -350,7 +347,7 @@ const cartAction = async (req, res) => {
 
 
 
-//  Price Filter (Put Metthod) :-
+//  Price Filter 
 
 const priceFilter = async (req, res , next) => {
     
@@ -388,9 +385,7 @@ const priceFilter = async (req, res , next) => {
 
 };
 
-//===============================//
 
-// sort on New arrivals 
 
 const newArrivals = async (req, res, next) => {
   try {
@@ -402,10 +397,10 @@ const newArrivals = async (req, res, next) => {
           query.status = true;
       }
 
-      let sortOptions = { name: 1 }; // default sorting by name
+      let sortOptions = { name: 1 }; 
 
       if (newArrival) {
-          sortOptions = { createdAt: -1 }; // sort by createdAt in descending order
+          sortOptions = { createdAt: -1 };
       }
 
       const products = await product.find(query).sort(sortOptions).populate('category');
@@ -415,9 +410,6 @@ const newArrivals = async (req, res, next) => {
   }
 };
 
-
-
-//  Acending Order Product Name (Put Method) :-
 
 const aAzZ = async (req, res , next) => {
   
@@ -442,9 +434,6 @@ const aAzZ = async (req, res , next) => {
 
 };
 
-//===============================//
-
-//  Decending Order Product Name (Put Method) :-
 
 const zZaA = async (req, res , next) => {
   
@@ -469,9 +458,6 @@ const zZaA = async (req, res , next) => {
 
 };
 
-//===============================//
-
-//  Price Low to High (Put Method) :-
 
 const lowToHigh = async (req, res , next) => {
   
@@ -496,9 +482,6 @@ const lowToHigh = async (req, res , next) => {
 
 };
 
-//===============================//
-
-//  Price High To Low (Put Method) :-
 
 const highTolow = async (req, res , next) => {
   
@@ -549,6 +532,7 @@ const catchAll = async (req, res , next) => {
 
   
   module.exports = {
+    loadRegister,
     register_user,
     login_user,
     verify_otp,

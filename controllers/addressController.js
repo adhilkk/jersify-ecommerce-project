@@ -1,16 +1,11 @@
-//  Import Address Modal :-
+
 const Address = require('../models/address');
-
-//  Import User Modal :-
 const User = require('../models/userModel');
-
-//  Import Product Modal :-
 const Product = require('../models/product');
-
-//  Import Category Modal :-
 const Category = require('../models/categoryModel');
 
-//  loadAddress (Get Method) :-
+
+
 
 const loadAddress = async (req, res , next) => {
     
@@ -22,9 +17,9 @@ const loadAddress = async (req, res , next) => {
 
             const msg = req.flash('flash');
             
-            const userData = await User.findById({ _id: req.session.user._id });   //   Passing User Id into Ejs Page
+            const userData = await User.findById({ _id: req.session.user._id });   
 
-            const addressDataa = await Address.findOne({ userId: req.session.user._id})      //  Passing Address Data into Ejs Page
+            const addressDataa = await Address.findOne({ userId: req.session.user._id})  
 
             res.render('users/address', { login: req.session.user, categoryData, userData, msgg: msg, address: addressDataa });
 
@@ -43,7 +38,6 @@ const loadAddress = async (req, res , next) => {
 
 };
 
-//  addAddress (Post Method) :-
 
 const addAddress = async (req, res , next) => {
     
@@ -100,7 +94,6 @@ const addAddress = async (req, res , next) => {
 
 };
 
-//  deleteAddress (Post Method) :-
 
 const deleteAddress = async (req, res , next) => {
     
@@ -126,7 +119,6 @@ const deleteAddress = async (req, res , next) => {
 
 };
 
-//  Edit Address (Put Method) :-
 
 const editAddress = async (req, res , next) => {
     
@@ -147,7 +139,7 @@ const editAddress = async (req, res , next) => {
 
 };
 
-//  Verify Edit Address (Post Method) :-
+
 
 const verifyEditAddress = async (req, res , next) => {
     

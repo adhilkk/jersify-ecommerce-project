@@ -19,7 +19,8 @@ const securepassword = async (password) => {
     
 }
 
-//__________user profile     
+//user profile     
+
 const profileLoad = async ( req , res ) => {
     
     try {
@@ -42,7 +43,6 @@ const profileLoad = async ( req , res ) => {
         
     }
 }
-// profile edit 
 
 const editProfile = async ( req , res ) => {
     try {
@@ -83,7 +83,6 @@ const passCange = async (req , res) =>{
     }
 }
 
-// ad addresss
 
 const addAddress = async ( req , res ) => {
     try {

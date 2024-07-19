@@ -1,23 +1,10 @@
-//  Import Address Modal :-
 const Address = require("../models/address");
-
-//  Import User Modal :-
 const User = require("../models/userModel");
-
-//  Import Product Modal :-
 const Product = require("../models/product");
-
-//  Import Category Modal :-
 const Category = require("../models/categoryModel");
-
-//  Import Order Modal :-
 const Order = require('../models/orderModel');
-
-//  Import Cart Modal :-
 const Cart = require('../models/cart');
 
-
-//  loadOrder (Get Method) :-
 
 const loadOrder = async (req, res , next) => {
 
@@ -79,7 +66,7 @@ const loadOrder = async (req, res , next) => {
 
 };
 
-//  OrderDetails (Get Method) :-
+
 
 const orderView = async (req, res , next) => {
       
@@ -99,9 +86,9 @@ const orderView = async (req, res , next) => {
     
 };
 
-//  Order Kitty (Post Method) :-
 
-const orderKitty = async (req, res , next) => {
+
+const orderRecieved = async (req, res , next) => {
     
     try {
 
@@ -185,7 +172,7 @@ const orderKitty = async (req, res , next) => {
                 //             },
                             
                 //         }
-                        
+                         
                 //     );
 
                 // }
@@ -406,11 +393,11 @@ const returnOrd = async (req, res , next) => {
 
         if (returnMasg) {
          
-            console.log("Okey Anuu");
+           
          
         } else {
 
-            console.log("Okey Allaaaa");
+            
 
         }
 
@@ -428,7 +415,7 @@ const returnOrd = async (req, res , next) => {
 module.exports = {
 
     loadOrder,
-    orderKitty,
+    orderRecieved,
     loadThanks,
     orderView,
     orderCancel,

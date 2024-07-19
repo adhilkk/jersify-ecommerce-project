@@ -4,6 +4,7 @@ const adminController = require("../controllers/adminController");
 const categoryController = require("../controllers/categoryController");
 const productController = require("../controllers/productController");
 const admin_order = require('../controllers/adminOrderController')
+const admin_middilware = require('../middleware/adminAuth');
 const path = require("path");
 
 const bodyParser = require("body-parser");
@@ -15,7 +16,6 @@ admin_router.use(
 );
 
 const multer = require("multer");
-
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, path.join(__dirname, "../public/productImage"));
@@ -35,44 +35,42 @@ const upload = multer({
   },
 });
 
-admin_router.get("/", (req, res) => {
+admin_router.get("/",admin_middilware.isLogout, (req, res) => {
   res.render("../views/admin/adminLogin.ejs", { title: "admin" });
 });
 
-// admin_router.get('/userList', (req, res) => {
-//   res.render('../views/admin/userList.ejs', { title: 'userlist' });
-// });
 admin_router.get("/userList", adminController.loadusers);
+admin_router.post("/adminLogin", adminController.handleLogin);
+admin_router.post("/adminLogout", adminController.handleLogout);
+admin_router.get("/dashboard", admin_middilware.isLogin, adminController.renderDashboard);
 
-// Render login form
+
 
 // Handle login form submission
-admin_router.post("/adminLogin", adminController.handleLogin);
 
 // Dashboard route
-admin_router.get("/dashboard", adminController.renderDashboard);
 
 //for blocking
 
-admin_router.get("/admin/users", adminController.getUsers);
-admin_router.get("/admin/users/:id", adminController.toggleBlockUser);
+admin_router.get("/admin/users", admin_middilware.isLogin, adminController.getUsers);
+admin_router.get("/admin/users/:id", admin_middilware.isLogin, adminController.toggleBlockUser);
 
 // Category routes
-admin_router.get("/adminCategory", adminController.adminCategory);
+admin_router.get("/adminCategory", admin_middilware.isLogin, adminController.adminCategory);
 
 admin_router.post("/addCatee", categoryController.addCategory);
 admin_router.put("/CateEdit", categoryController.editCategory);
 admin_router.put("/Categoryaction", categoryController.categoryAction);
 
 //product
-admin_router.get("/products", productController.loadProducts);
-admin_router.get("/productsAdd", productController.loadAddproduct);
+admin_router.get("/products", admin_middilware.isLogin, productController.loadProducts);
+admin_router.get("/productsAdd", admin_middilware.isLogin, productController.loadAddproduct);
 admin_router.post(
   "/productsAdd",
   upload.array("images", 3),
   productController.addProducts
 );
-admin_router.get("/editProduct", productController.loadeditProduct);
+admin_router.get("/editProduct", admin_middilware.isLogin, productController.loadeditProduct);
 admin_router.put("/productStatus", productController.productStatus);
 admin_router.post(
   "/productedit/:id",
@@ -83,12 +81,12 @@ admin_router.post(
   ]),
   productController.editProduct
 );
-admin_router.get("/products", productController.loadProducts);
-admin_router.get("/products", productController.loadProducts);
+admin_router.get("/products", admin_middilware.isLogin, productController.loadProducts);
+admin_router.get("/products", admin_middilware.isLogin, productController.loadProducts);
 
 
 //  Admin Orders List (get)
-admin_router.get('/orders',admin_order.loadOrderss);
+admin_router.get('/orders', admin_middilware.isLogin,admin_order.loadOrderss);
 
 //  Admin Orders Details (post)
 admin_router.get('/ordDetails', admin_order.ordersDetails);
