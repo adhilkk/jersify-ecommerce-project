@@ -39,16 +39,12 @@ admin_router.get("/",admin_middilware.isLogout, (req, res) => {
   res.render("../views/admin/adminLogin.ejs", { title: "admin" });
 });
 
+
 admin_router.get("/userList", adminController.loadusers);
 admin_router.post("/adminLogin", adminController.handleLogin);
 admin_router.post("/adminLogout", adminController.handleLogout);
 admin_router.get("/dashboard", admin_middilware.isLogin, adminController.renderDashboard);
 
-
-
-// Handle login form submission
-
-// Dashboard route
 
 //for blocking
 
@@ -56,8 +52,8 @@ admin_router.get("/admin/users", admin_middilware.isLogin, adminController.getUs
 admin_router.get("/admin/users/:id", admin_middilware.isLogin, adminController.toggleBlockUser);
 
 // Category routes
-admin_router.get("/adminCategory", admin_middilware.isLogin, adminController.adminCategory);
 
+admin_router.get("/adminCategory", admin_middilware.isLogin, adminController.adminCategory);
 admin_router.post("/addCatee", categoryController.addCategory);
 admin_router.put("/CateEdit", categoryController.editCategory);
 admin_router.put("/Categoryaction", categoryController.categoryAction);
@@ -85,16 +81,14 @@ admin_router.get("/products", admin_middilware.isLogin, productController.loadPr
 admin_router.get("/products", admin_middilware.isLogin, productController.loadProducts);
 
 
-//  Admin Orders List (get)
+//  Orders 
 admin_router.get('/orders', admin_middilware.isLogin,admin_order.loadOrderss);
-
-//  Admin Orders Details (post)
 admin_router.get('/ordDetails', admin_order.ordersDetails);
-
-//  Admin OrderStatus Handling (put)
 admin_router.put("/orderStatusHandling", admin_order.orderProstatus);
-
 admin_router.post("/retordmanage",admin_order.returnorderManage)
+
+
+
 
 
 module.exports = admin_router;

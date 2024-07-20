@@ -5,14 +5,15 @@ const User = require ('../models/userModel')
 
 
 
-const cart = async ( req ,res ) => {
-
+const cartLoad = async ( req ,res ) => {
+    
     try {
        
         const categoryData = await category.find({is_listed: true})
         const listedCategory = await category.find({is_listed:true})
         const userdata = await User.findById({_id:req.session.user._id})
         const userProduct = await Cart.findOne({userId : req.session.user._id}).populate('product.productId')
+        const productQuantity = await Cart.findOne({userId : req.session.user._id}).populate('product.quantity')
         const cartData = await Cart.findOne({userId : req.session.user._id});
 
         
@@ -27,7 +28,7 @@ const cart = async ( req ,res ) => {
 
             
 
-            res.render('users/cart',{login:req.session.user,listedCategory,userProduct,userdata,categoryData , newPricee : newPrice.Total_price , msgg : msg , cartData})
+            res.render('users/cart',{login:req.session.user,listedCategory,userProduct,userdata,categoryData , newPricee : newPrice.Total_price , msgg : msg , cartData,productQuantity})
 
         }else{
             res.redirect('/login')
@@ -44,16 +45,19 @@ const cart = async ( req ,res ) => {
 const addCart = async ( req , res ) => {
 
     try {
-        
+        console.log(req.query.qty);
 
         if(req.session.user){
             const proId = req.query.id
             const userIdd = req.session.user._id
             const quantity = req.query.qty || 1
 
+            console.log(quantity,"ASDFGHJK");
+
             
 
         const cartProduct = await PRODUCTS.findOne({_id:proId});
+        console.log(cartProduct);
 
        
 
@@ -70,7 +74,8 @@ const addCart = async ( req , res ) => {
 
                 product:{productId:proId,
 
-                price: total}
+                price: total,quantity:quantity
+            }
 
             }},{new:true ,upsert:true})
 
@@ -92,23 +97,28 @@ const addCart = async ( req , res ) => {
 }
 
 
+
 const cartEdit = async (req, res) => {
 
     try {
 
-        const {proId , cartId} = req.body;
+        const {proId , cartId,quantity} = req.body;
      
       const product = await PRODUCTS.findOne({ _id: proId });
-
-      const newval = product.price * req.body.quantity;
+      console.log(product,"GGGGGG");
+      const newval = product.discount > 0 ? product.dis_price * quantity : product.price * quantity;
+      console.log(newval,"JJJJJ");
       
       const updatedCart = await Cart.findOneAndUpdate(
 
         { _id: cartId, "product.productId": proId },
 
         {$set: { "product.$.price": newval,"product.$.quantity": req.body.quantity,},},{ new: true });
+
+        console.log(updatedCart,"UUUUUU");
       
       const total = updatedCart.product.reduce((acc, product) => acc + product.price,0);
+      console.log(total,"TTTTT");
   
        await Cart.findByIdAndUpdate(
 
@@ -159,7 +169,7 @@ const deleteCart = async(req , res)=>{
 
 
 module.exports = {
-    cart,
+    cartLoad,
     addCart,
     deleteCart,
     cartEdit

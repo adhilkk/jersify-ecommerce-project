@@ -94,10 +94,11 @@
 </div>
 
 <script>
-  function userAction(user) {
+  async function userAction(user) {
     const btn = document.getElementById(`b${user}`);
     const status = document.getElementById(`s${user}`);
-    fetch(`/admin/users/${user}`);
+    const result = await fetch(`/admin/admin/users/${user}`);
+    console.log(result);
     
     if (btn.textContent == 'Block') {
       btn.textContent = 'Unblock';

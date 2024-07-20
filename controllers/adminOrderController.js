@@ -1,20 +1,15 @@
 
-//  Import Admin Modal :-
 const Admin = require ('../models/userModel')
-
-//  Impoert Order Modal :-
 const Order = require('../models/orderModel');
-
 const Product = require('../models/product')
 
 
-//  loadOrders (Get Method) :-
 
 const loadOrderss = async (req, res) => {
     
     try {
         
-        //  Page Navigation :-
+      
 
         const limit = 5;
         const page = parseInt(req.query.page) || 1
@@ -38,7 +33,7 @@ const loadOrderss = async (req, res) => {
 
 };
 
-//  ordersDetails (Post Method) :-
+
 
 const ordersDetails = async (req, res) => {
     
@@ -60,7 +55,7 @@ const ordersDetails = async (req, res) => {
 
 };
 
-//  OrderDetails Handling Fub :-
+
 
 const updateOrderStatus = async (orderId) => {
 
@@ -106,7 +101,7 @@ const updateOrderStatus = async (orderId) => {
     
 };
 
-//  orderDetails Handling (Post Method) :-
+
 
 const orderProstatus = async (req, res) => {
 
@@ -142,7 +137,7 @@ const orderProstatus = async (req, res) => {
     
 };
 
-//  Return Managing Admin :-
+
 
 const returnorderManage = async (req, res) => {
 
@@ -162,7 +157,7 @@ const returnorderManage = async (req, res) => {
             { new: true }
         );
 
-        //  Find Single Product And Other Things :-
+        
         
         const orderGot = await Order.findOne(
         
@@ -195,13 +190,13 @@ const returnorderManage = async (req, res) => {
 
             );
 
-            //  Money Managing :-
+            
       
             let moneyDecreses = orderGot.products[0].price;
 
             console.log(moneyDecreses + "moneyyyy");
       
-            //  There Is If Coupen Used Product Came (Menaging) :-
+           
             
             if (orderGot.percentage >= 1) {
 

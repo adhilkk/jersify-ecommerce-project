@@ -36,7 +36,7 @@ const loadProducts = async (req, res) => {
 const loadAddproduct = async (req, res) => {
   try {
     const listcategory = await Category.find({ is_listed: true });
-    // console.log("loadaddproduct");
+    
 
     res.render("admin/addproduct", { listcategory,});
   } catch (error) {
@@ -50,12 +50,12 @@ const addProducts = async (req, res) => {
 
   try {
 
-    // console.log("hekk");
+    
 
     let images = [];
 
     const image = req.files;
-    // console.log(req.files);
+    
 
     image.forEach((file) => {
 
@@ -72,9 +72,7 @@ const addProducts = async (req, res) => {
 
     console.log(categories + "aaa");
   
-    // console.log(categories)
-    // console.log(req.body)
-    // console.log("product top")
+    
 
     const product = Products.create({
       name: req.body.product,

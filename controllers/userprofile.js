@@ -48,14 +48,14 @@ const editProfile = async ( req , res ) => {
     try {
         const id = req.query.id
        const { name , phones} = req.body
-       const updateData = await User.findByIdAndUpdate({_id:id},{$set:{username:name,phone:phones}})
+       const updateData = await User.findByIdAndUpdate({_id:id},{$set:{fullName:name,phoneNumber:phones}})
        if(updateData){
         req.flash('flash',"Edited Successfully")
         res.redirect('/profile')
        }
        
     } catch (error) {
-        
+        res.status(400).send(error.message);
     }
 }
 

@@ -1,8 +1,12 @@
 const User = require("../models/userModel")
 const product = require("../models/product")
 const category = require("../models/categoryModel")
-const bcryptjs = require("bcryptjs");
+// const bcrypt = require("bcrypt");
 const nodemailer = require('nodemailer');
+const Cart = require ('../models/cart')
+const bcrypt = require('bcrypt')
+const flash = require('express-flash')
+
 
 
 //  OTPs and user data
@@ -58,7 +62,7 @@ const register_user = async (req, res) => {
 
   const securePassword = async (password) => {
     try {
-      const passwordHash = await bcryptjs.hash(password, 10);
+      const passwordHash = await bcrypt.hash(password, 10);
       return passwordHash;
     } catch (error) {
       res.status(400).send(error.message);
@@ -155,12 +159,13 @@ const loadLogin = async (req , res) => {
 
     } else {
 
-      res.render('users/login')
+      const msg = req.flash('flash')
+      res.render('users/login' , {msgg:msg})
 
     }
     
   } catch (error) {
-    
+    res.status(400).send(error.message);
   }
 
 }
@@ -173,31 +178,49 @@ const loadShop = async (req , res) => {
       res.render('users/product')
       
     } catch (error) {
-      
+      res.status(400).send(error.message);
     }
 
 }
 
 const login_user = async (req, res) => {
+
   try {
       const { Email, password } = req.body;
-
       const userData = await User.findOne({ email: Email });
 
-      if (!userData || !(await bcryptjs.compare(password, userData.password))) {
-          
-          res.redirect('/users/login', { error: 'Invalid email or password' });
+      if(!userData){
+
+        req.flash('flash' , 'Invalid Email')
+        res.redirect('/login');
+
       }
 
-      if (userData.is_blocked) {
-          
-           res.redirect('/users/login', { error: 'Your account is blocked. Please contact support.' });
-      }
+      if(userData){
 
-      
-      console.log(userData);
-      req.session.user = userData
-      res.redirect('/'); 
+        let check = await bcrypt.compare(password, userData.password)
+  
+        if(check){
+
+          if (userData.is_blocked) {
+              console.log('blocke avoo');
+              res.redirect('/users/login', { error: 'Your account is blocked. Please contact support.' });
+          }
+          req.session.user = userData
+          res.redirect('/'); 
+
+        } else {
+            
+          if (!check) {
+              
+              req.flash('flash' , 'Invalid Password')
+              res.redirect('/login');
+          
+            }
+
+        }
+
+        }
 
   } catch (error) {
       res.status(400).send(error.message);
@@ -222,12 +245,13 @@ const productDetails = async (req, res) => {
     
   try {
 
+    const login = req.session.user
       const id = req.query.id;
       const categoryData = await category.find({ is_listed: true });      
       const productData = await product.findOne({ _id: id }); 
       const productRecom= await product.find({category:productData.category}).populate('category')
        {
-          res.render("users/productDetails", { categoryData , productData,productRecom});
+          res.render("users/productDetails", { categoryData , productData,productRecom,login});
       }
       
   } catch (error) {
@@ -324,7 +348,7 @@ const cartAction = async (req, res) => {
           
           const userIdd = req.session.user._id;
 
-          const cartAcction = await cart.findOne({ userId: userIdd });
+          const cartAcction = await Cart.findOne({ userId: userIdd });
 
           const val = cartAcction.product.length;
 

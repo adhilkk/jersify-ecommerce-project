@@ -11,7 +11,6 @@ const flash = require('express-flash')
 
 const dotenv = require('dotenv');
 dotenv.config({ path: 'config.env' });
-console.log(process.env.CLIENT_ID,'df')
 const app = express();
 
 // Middleware
@@ -68,8 +67,7 @@ const indexRoute = require('./routes/userRoute');
 const Admin = require('./models/adminModel');
 const bcryptjs = require("bcryptjs");
 
- 
-console.log(process.env.CLIENT_ID)
+
 app.get('/qqqq', async (req, res) => {
   const securePassword = async (password) => {
     try {

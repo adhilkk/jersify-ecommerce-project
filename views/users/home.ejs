@@ -136,9 +136,9 @@
                         </a>
 
                         <div class="dropdown cart-dropdown">
-                            <a href="/cart" class="dropdown-toggle" role="button" aria-haspopup="true">
+                            <a href="/cart" class="dropdown-toggle" role="button" >
                                 <i class="icon-shopping-cart"></i>
-                                <span class="cart-count">1</span>
+                                <span class="cart-count" id="cart">1</span>
                             </a>
 
                         </div><!-- End .cart-dropdown -->
@@ -278,4 +278,25 @@
             
             
         </main><!-- End .main -->
+
+        <script>
+
+            //  Cart Count :-
+        
+            cartAction()
+            
+            function cartAction(){
+        
+                const cartt = document.getElementById('cart')
+        
+                fetch('/cartAction' , {method : 'post'}).then(data=>data.json()).then(data =>{
+        
+                    cartt.textContent = data.success || 0
+        
+                    
+                })
+        
+            };
+        
+        </script>
         <%- include('../layouts/footer1.ejs')-%>

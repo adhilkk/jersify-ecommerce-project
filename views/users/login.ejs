@@ -25,12 +25,11 @@
 							    
 							</ul>
 							<div class="tab-content">
-                                <% if (typeof error !== 'undefined') { %>
-                                    <p class="text-danger"><%= error %></p>
-                                <% } %>
+                              
                                 
                                 <div class="tab-pane fade show  active" id="signin-2" role="tabpanel" aria-labelledby="signin-tab-2">
                                   <form action="/login" method="post">
+                                    <p id="msg" hidden class="text-center text-danger"><%= msgg %></p>
                                     <div class="form-group">
                                       <label for="signin-email-2">Email address *</label>
                                       <input type="email" class="form-control" id="signin-email-2" name="Email" required>
@@ -46,10 +45,7 @@
                                         <span>LOG IN</span>
                                         <i class="icon-long-arrow-right"></i>
                                       </button>
-                                      <button  class="btn btn-outline-primary-2" onclick="window.location.href='/registerPage';">
-                                        <span>REGISTER</span>
-                                        <i class="icon-long-arrow-right"></i>
-                                      </button>
+                                      
                               
                                       <div class="custom-control custom-checkbox">
                                         <input type="checkbox" class="custom-control-input" id="signin-remember-2">
@@ -59,6 +55,11 @@
                                       <a href="#" class="forgot-link">Forgot Your Password?</a>
                                     </div><!-- End .form-footer -->
                                   </form>
+                                  <div class="text-center pb-1">
+
+                                    <a href="/registerPage" class="text-success ">Don't have an account?,Click here</a>
+                                    
+                                  </div>
                                   <div class="form-choice">
                                     <p class="text-center">or sign in with</p>
                                     <div class="row">
@@ -87,3 +88,32 @@
         </main><!-- End .main -->
 
         <%- include('../layouts/footer1.ejs')-%>
+
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+        <script>
+
+          let msg = document.getElementById('msg')
+
+          console.log(msg);
+
+          if(msg.textContent == 'Invalid Password'){
+
+            Swal.fire({
+          title: "Invalid Password!",
+          text: "Invalid Password",
+          icon: "error"
+        });
+        
+      } else if(msg.textContent == 'Invalid Email'){
+            Swal.fire({
+          title: "Invalid Email!",
+          text: "Invalid Email",
+          icon: "error"
+        });
+
+
+
+          }
+
+        </script>

@@ -1,24 +1,12 @@
-//  Import Address Modal :-
 const Address = require("../models/address");
-
-//  Import User Modal :-
 const User = require("../models/userModel");
-
-//  Import Product Modal :-
 const Product = require("../models/product");
-
-//  Import Category Modal :-
 const Category = require("../models/categoryModel");
-
-//  Cart
 const Cart = require('../models/cart');
-
-
-
-//  Import Order Modal :-
 const Order = require('../models/orderModel');
 
-//    Load Checkout (Get Method) :-
+
+
 
 const loadCheckout = async (req, res , next) => {
     
@@ -37,19 +25,14 @@ const loadCheckout = async (req, res , next) => {
             
             const cartDataa = await Cart.findOne({ userId: req.session.user._id }).populate('product.productId');
 
-            // const walletData = await Wallet.findOne({ userId: req.session.user._id });
+            
         
             if (cartDataa) {
 
-                // const coupenData = await Coupen.find({ status: true });
-                                
+               
                 let newTprice = cartDataa.product.reduce((acc, val) => acc + val.price, 0);
 
-                // if (cartDataa.coupenDiscount >= 0) {
-                    
-                //     newTprice -= cartDataa.coupenDiscount;
-
-                // }
+               
                 
                 const cartData = await Cart.findOneAndUpdate({ userId: req.session.user._id }, { $set: { totalCartPrice: newTprice } }, { upsert: true, new: true });
 
@@ -79,7 +62,7 @@ const loadCheckout = async (req, res , next) => {
 
 };
 
-//  VerifyCartAddress (Post Method) :-
+
 
 const verifyCheckOutAddress = async (req, res , next) => {
 
@@ -145,7 +128,7 @@ const verifyCheckOutAddress = async (req, res , next) => {
 
 };
 
-//  Delete Address (Post Method) :-
+
 
 const deleteAdd = async (req, res , next) => {
     
@@ -170,7 +153,7 @@ const deleteAdd = async (req, res , next) => {
 
 }
 
-//  Edit Address (Put Method) :-
+
 
 const editAddress = async (req, res , next) => {
     
@@ -190,7 +173,7 @@ const editAddress = async (req, res , next) => {
 
 };
 
-//  Verify Edit Address (Post Method) :-
+
 
 const verifyEditAddress = async (req, res , next) => {
     
@@ -218,7 +201,7 @@ const verifyEditAddress = async (req, res , next) => {
 
 };
 
-//  Choosee Address (Post Method) :-
+
 
 const chooseAddress = async (req, res , next) => {
     
@@ -267,7 +250,7 @@ const chooseAddress = async (req, res , next) => {
 
 
 
-//  Changing ProStatus (Post Method) :-
+
 
 const changeProStatus = async (req, res, next) => {
     
@@ -279,7 +262,7 @@ const changeProStatus = async (req, res, next) => {
 
         const updation = await Order.findOneAndUpdate({ _id: ordIdd }, { $set: { 'products.$[].orderProStatus': 'pending' } });
 
-        //  Stock Managing :-
+        
 
         ord.products.forEach(async (e) => {
             

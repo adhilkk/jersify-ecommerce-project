@@ -12,7 +12,7 @@ dotenv.config({ path: 'config.env' });
 
 const loadusers = async(req,res)=>{
     try {
-        //page navigation
+        
 
         const limit = 5;
         const page = parseInt(req.query.page) || 1
@@ -26,10 +26,10 @@ const loadusers = async(req,res)=>{
         .skip(skip)
         .limit(limit)
 
-        // res.render('usersList')
+        
 
         res.render('../views/admin/userList.ejs',{clint : userData, currentPage : page,totalPages})
-        // const userData = await Admin.find({is_Admin:false})
+       
     } catch (error) {
         console.log(error.message);
     }
@@ -110,7 +110,6 @@ const renderLogin = (req, res) => {
 
   //blockingggg
 
-
   const getUsers = async (req, res) => {
     try {
       const users = await User.find({});
@@ -122,20 +121,17 @@ const renderLogin = (req, res) => {
   
   const toggleBlockUser = async (req, res) => {
     const userId = req.params.id;
+    console.log('fcfhgbhghg');
     try {
       const user = await User.findById(userId);
       user.is_blocked = !user.is_blocked;
       await user.save();
+      console.log(user);
       res.sendStatus(200);
     } catch (error) {
       res.status(500).send(error.message);
     }
   };
-
-
-
-
-
 
 
 //adminCategory

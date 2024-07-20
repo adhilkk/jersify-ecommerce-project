@@ -9,7 +9,7 @@ passport.serializeUser((user , done) => {
 passport.deserializeUser(function(user, done) { 
 	done(null, user); 
 }); 
-console.log(process.env.CLIENT_SECRET,'siuu')
+
 passport.use(new GoogleStrategy({
 	clientID: process.env.CLIENT_ID,
 	clientSecret: process.env.CLIENT_SECRET,

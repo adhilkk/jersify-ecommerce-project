@@ -40,18 +40,10 @@ user_router.get('/shop' , user_Controller.loadShop)
 
 
 user_router.get('/registerPage',user_Controller.loadRegister)
-user_router.post('/register',user_Controller.register_user)
 user_router.post('/register', user_Controller.register_user);
 user_router.post('/verify-otp', user_Controller.verify_otp); 
 user_router.post('/resend-otp', user_Controller.resend_otp);
 
-
-
-
-//produts
-
-user_router.get('/product', user_Controller.products);
-user_router.get('/productDetails',user_Controller.productDetails)
 
 
 // Auth 
@@ -64,19 +56,16 @@ user_router.get( '/auth/google/callback',
 	passport.authenticate( 'google', { 
 		successRedirect: '/success', 
 		failureRedirect: '/failure'
-}));
-
+	}));
+	
 // Success 
 user_router.get('/success' , user_Controller.successGoogleLogin); 
 // failure 
 user_router.get('/failure' , user_Controller.failureGoogleLogin);
 
-
-
-
-
+	
 //user profile 
-
+	
 user_router.get('/profile',profile_controller.profileLoad)
 user_router.post('/editProfile',profile_controller.editProfile)
 user_router.post('/editPassword',profile_controller.passCange)
@@ -87,9 +76,17 @@ user_router.put("/editAddress", address_controller.editAddress);
 user_router.post("/verifyEditAddress", address_controller.verifyEditAddress);
 
 
+
+//produts
+
+user_router.get('/product', user_Controller.products);
+user_router.get('/productDetails',user_Controller.productDetails)
+
+	
 // cart
 
-user_router.get('/cart',cart_controller.cart)
+
+user_router.get('/cart',cart_controller.cartLoad)
 user_router.post('/addCart',cart_controller.addCart)
 user_router.put('/cartUpdate' , cart_controller.cartEdit)
 user_router.put('/deleteCart' , cart_controller.deleteCart);
@@ -106,7 +103,6 @@ user_router.put('/highTolow', user_Controller.highTolow);
 
 
 //  Orders 
-
 
 user_router.get('/orders',  orderController.loadOrder);
 user_router.get("/orderDetails",  orderController.orderView);

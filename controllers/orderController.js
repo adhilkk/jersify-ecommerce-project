@@ -283,13 +283,13 @@ const orderCancel = async (req, res , next) => {
 
         const orderFind = await Order.findOne({ _id: ordId, "products.productId": proId, "products.canceled": true, }, { "products.$": 1, });
 
-        let findOrd; //  Find Order Variable
-        let ordVal;  //  Order Amount Variable
-        let moneyDecrese // Product Price
+        let findOrd; 
+        let ordVal;  
+        let moneyDecrese 
 
         if (orderFind) {
             
-            const getQuantity = orderFind.products[0].quantity;     //  Find Pro Quantity
+            const getQuantity = orderFind.products[0].quantity;     
 
             console.log(getQuantity + 'Quantity');
     
@@ -374,6 +374,7 @@ const returnOrd = async (req, res , next) => {
         //     }
 
         // }
+        
         
         //  Return Product :-
         
