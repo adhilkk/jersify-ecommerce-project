@@ -21,7 +21,7 @@
 
                 </div>
                 
-                <h5 class="text-center pt-4 text-success "><span>Reason : </span><%= ordDettails.products[0].reason %></h5>
+                <h5 class="text-center pt-4 text-success "><span>Reason : </span><%= ordDettails?.products[0].reason %></h5>
 
                 <div class="modal-body d-flex justify-content-center p-5">
 
@@ -88,9 +88,9 @@
                                                     <div class=" w-75">
 
                                                         <h5 class="mt-1 ">Customer</h5>
-                                                        <span><%= ordDettails.userId.fullName %></span><br>
-                                                        <span><%= ordDettails.userId.email %></span><br>
-                                                        <span><%= ordDettails.userId.phone %></span>
+                                                        <span><%= ordDettails.userId?.fullName %></span><br>
+                                                        <span><%= ordDettails.userId?.email %></span><br>
+                                                        <span><%= ordDettails.userId?.phone %></span>
 
 
                                                     </div>

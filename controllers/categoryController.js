@@ -10,7 +10,7 @@ const addCategory = async (req, res) => {
     let namee = req.query.name
     let radioo = req.query.radio
 
-    console.log(inpValue);
+    
 
     if (inpValue) {
 
@@ -35,7 +35,6 @@ const addCategory = async (req, res) => {
       const addCate = new Category({
 
         name: namee,
-
         is_listed: radioo,
 
       });
@@ -59,7 +58,7 @@ const editCategory = async (req, res) => {
     const cateId = req.query.id;
     const newName = req.query.value.trim();
 
-    console.log(cateId , newName);
+    
 
     //checking existing one
 
@@ -102,7 +101,7 @@ const categoryAction = async (req, res) => {
   try {
     const cateId = req.query.id;
 
-    console.log(cateId);
+    
 
     const listed = await Category.findOne({ _id: cateId });
 

@@ -4,7 +4,9 @@ const Product = require("../models/product");
 const Category = require("../models/categoryModel");
 const Cart = require('../models/cart');
 const Order = require('../models/orderModel');
-
+const razorPay = require('../controllers/razorpay');
+const crypto = require('crypto');
+const Wallet= require("../models/wallet");
 
 
 
@@ -12,9 +14,12 @@ const loadCheckout = async (req, res , next) => {
     
     try {
 
+        const cartData = await Cart.findOne({ userId: req.session.user._id });
+        
+
         const categoryData = await Category.find({ is_Listed: true });
 
-        
+         
         if (req.session.user) {
             
             const msg = req.flash('flash');
@@ -36,7 +41,7 @@ const loadCheckout = async (req, res , next) => {
                 
                 const cartData = await Cart.findOneAndUpdate({ userId: req.session.user._id }, { $set: { totalCartPrice: newTprice } }, { upsert: true, new: true });
 
-                console.log(cartData,"asdfghjkl;");
+                
                             
                 res.render("users/checkout", { login: req.session.user, categoryData, addres: addresData, userData, msgg: msg ,cartData,newTprice});
                 
@@ -108,7 +113,7 @@ const verifyCheckOutAddress = async (req, res , next) => {
 
             } else {
 
-                console.log("error aneeee");
+                
 
             }
             
@@ -288,6 +293,212 @@ const changeProStatus = async (req, res, next) => {
 
 };
 
+
+//  Payment Method (RazorPay Post Method) :-
+
+
+const RazorPay = async (req, res) => {
+     
+    try {
+
+        const userIdd = req.session.user._id;
+
+        if (userIdd) {
+
+            const cartData = await Cart.findOne({ userId: userIdd });
+
+            const addressData = await Address.findOne({ userId: userIdd });
+
+            if (!cartData || cartData.product.length == 0) {
+                
+                res.send({ emptyCart: true });
+
+            } else if (addressData.addresss.length == 0) {
+                
+                res.send({ noAddress: true });
+
+            } else {
+
+                const user = await User.findOne({ _id: req.session.user });
+                const amount = req.body.amount * 100;
+
+              
+        
+                const options = {
+        
+                    amount: amount,
+                    currency: "INR",
+                    receipt: "absharameen625@gmail.com",
+                    
+                };
+        
+                razorPay.orders.create(options, (err, order) => {
+        
+                    if (!err) {
+        
+                        res.send({
+        
+                            succes: true,
+                            msg: "ORDER created",
+                            order_id: order.id,
+                            amount: amount,
+                            key_id: process.env.RAZORPAY_IDKEY,
+                            name: user.fullName,
+                            email: user.email,
+        
+                        });
+        
+                    } else {
+        
+                        console.error("Error creating order:", err);
+        
+                        res.status(500).send({ success: false, msg: "Failed to create order" });
+                    }
+        
+                });
+
+            }
+
+        } else {
+
+            res.redirect('/login');
+
+        }
+    
+    } catch (error) {
+
+        console.log(error.message);
+        
+    }
+
+};
+
+
+const failRazorpay = async (req, res) => {
+    
+    try {
+
+        const userIdd = req.session.user._id
+
+        const cart = await Cart.findOne({ userId: userIdd });
+
+        const payMethod = req.body.payment;
+
+        const addres = await Address.findOne({ userId: userIdd, 'addresss.status': true }, { 'addresss.$': 1 });
+
+        const { name, phone, address, pincode, locality, state, city } = addres?.addresss?.[0] ?? {};
+
+        const getFailedOrd = await order.create({
+
+            userId: userIdd,
+
+            products: cart.product.map((val) => ({
+
+                productId: val.productId,
+                quantity: val.quantity,
+                price: val.price,
+                orderProStatus: 'payment pending'
+
+            })),
+
+            deliveryAddress: {
+
+                name: name,
+                phone: phone,
+                address: address,
+                locality: locality,
+                city: city,
+                state: state,
+                pincode: pincode,
+            },
+
+            orderDate: Date.now(),
+            orderStatus:'payment pending',
+            orderAmount: cart.Total_price,
+            payment: payMethod,
+            coupenDis: cart.coupenDisPrice,
+            percentage: cart.percentage,
+
+        });
+
+        await Cart.updateOne({userId : userIdd} , {$unset : {products : 1 , coupenDisPrice : 0, percentage:0 , Total_price :0}});
+
+        if (getFailedOrd) {
+
+            
+            
+            res.redirect("/orders");
+
+        }
+        
+    } catch (error) {
+
+        console.log(error.message); 
+        
+    }
+
+};
+
+const sucRazorpay = async (req, res, next) => {
+    
+    try {
+
+        const userIdd = req.session.user._id;
+
+        if (userIdd) {
+
+
+            const user = await User.findOne({ _id: req.body.userId });
+            const amount = req.body.amount * 100;
+        
+            const options = {
+        
+                amount: amount,
+                currency: "INR",
+                receipt: "absharameen625@gmail.com",
+                    
+            };
+        
+            razorPay.orders.create(options, (err, order) => {
+        
+                if (!err) {
+        
+                    res.send({
+        
+                        succes: true,
+                        msg: "ORDER created",
+                        order_id: order.id,
+                        amount: amount,
+                        key_id: process.env.RAZORPAY_IDKEY,
+                        name: user.fullName,
+                        email: user.email,
+        
+                    });
+        
+                } else {
+        
+                    console.error("Error creating order:", err);
+        
+                    res.status(500).send({ success: false, msg: "Failed to create order" });
+                }
+        
+            });
+
+        } else {
+
+            res.redirect('/login');
+
+        }
+    
+    } catch (error) {
+
+        next(error, req, res);
+
+        
+    }
+
+};
+
 module.exports = {
 
     loadCheckout,
@@ -296,6 +507,9 @@ module.exports = {
     editAddress,
     verifyEditAddress,
     chooseAddress,
-    changeProStatus
+    changeProStatus,
+    RazorPay,
+    failRazorpay,
+    sucRazorpay
 
 }; 

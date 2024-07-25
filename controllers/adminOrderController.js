@@ -24,7 +24,7 @@ const loadOrderss = async (req, res) => {
             .limit(limit);
         
         res.render('admin/orderList', { currentPage: page, totalPages, orderData });
-        
+         
     } catch (error) {
 
         console.log(error.message);
@@ -36,14 +36,14 @@ const loadOrderss = async (req, res) => {
 
 
 const ordersDetails = async (req, res) => {
-    
+
     try {
 
         const ordId = req.query.id
-        console.log(ordId);
+        
 
-        const ordDettails = await Order.findOne({ _id: ordId }).populate('products.productId userId');
-        console.log(ordDettails);
+        const ordDettails = await Order.findOne({ _id: ordId }).populate('products.productId userId')
+       
 
         res.render('admin/orderDetails', {ordDettails , ordId});
         
@@ -146,7 +146,7 @@ const returnorderManage = async (req, res) => {
         const ordId = req.query.id      
         const proIdd = req.query.proId  
 
-        console.log(ordId + "   " + proIdd);
+        
 
         await Order.findOneAndUpdate(
         
@@ -157,7 +157,7 @@ const returnorderManage = async (req, res) => {
             { new: true }
         );
 
-        
+        //  Find Single Product And Other Things :-
         
         const orderGot = await Order.findOne(
         
@@ -171,7 +171,7 @@ const returnorderManage = async (req, res) => {
           
         );
 
-        console.log(orderGot + "ithhh");
+        
 
         if (orderGot) {
             
@@ -190,13 +190,13 @@ const returnorderManage = async (req, res) => {
 
             );
 
-            
+            //  Money Managing :-
       
             let moneyDecreses = orderGot.products[0].price;
 
-            console.log(moneyDecreses + "moneyyyy");
+            
       
-           
+            //  There Is If Coupen Used Product Came (Menaging) :-
             
             if (orderGot.percentage >= 1) {
 
@@ -215,7 +215,7 @@ const returnorderManage = async (req, res) => {
                     
                     let newVall = Math.floor((moneyDecreses - (moneyDecreses * orderGot.percentage / 100)));
 
-                    console.log(newVall + "offer");
+                    
                      
                     await Wallet.findOneAndUpdate({ userId: orderGot.userId }, { $inc: { balance: newVall }, $push: { transaction: { amount: newVall, creditOrDebit: 'credit' } } }, { new: true, upsert: true });
 

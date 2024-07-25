@@ -55,8 +55,8 @@
                                             <td class="quantity-col">
                                                 <div class="cart-product-quantity">
                                                     <!-- <input type="button" value="-" onclick="decrementQuantity(this)" /> -->
-                                                    <input type="number" class="form-control"
-                                                        oninput="stock(this,'<%=product.productId.price %>','<%= product.productId._id  %>','<%= locals.userProduct._id%>') ; stockCheck(this , '<%= product.productId.stock %>')"
+                                                    <input onfocus="notFocus(this)" type="number" class="form-control"
+                                                        onchange="stock(this,'<%=product.productId.price %>','<%= product.productId._id  %>','<%= locals.userProduct._id%>') ; stockCheck(this , '<%= product.productId.stock %>')"
                                                         value="<%= product.quantity %>" min="1" max="<%=product.productId.stock%>" step="1" data-decimals="0"
                                                         required>
                                                     <!-- <input type="button" value="+" onclick="incrementQuantity(this)" /> -->
@@ -79,7 +79,11 @@
                                 </tbody>
                         <% }) %>
                         </table>
-
+<script>
+    function notFocus(e){
+        e.blur()
+    }
+</script>
                         <div class="cart-bottom">
                             
 

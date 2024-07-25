@@ -25,7 +25,7 @@ const loadAddress = async (req, res , next) => {
 
         } else {
 
-            console.log("Byeee");
+            
 
         }
         

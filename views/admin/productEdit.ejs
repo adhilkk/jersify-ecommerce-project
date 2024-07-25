@@ -43,7 +43,7 @@
                       </div>
                       <div class="form-group">
                         <label for="exampleInputEmail3">Discount Price  :</label>
-                        <input type="number" class="form-control text-white w-50" min="0" max="<%= productsData.price %>" id="price" value="<%= productsData.discount %>"  name="Discountprice" placeholder="0">
+                        <input type="number" class="form-control text-white w-50" min="0" max="<%= productsData.price %>" id="disPrice" value="<%= productsData.discount %>"  name="Discountprice" placeholder="0">
                         <p id="price-error"class="text-danger "></p>
                       </div>
                     </div>      
@@ -254,13 +254,15 @@ document.getElementById('myForm').addEventListener('submit', function (event) {
       const initialPrice = "<%= productsData.price %>";
       const initialStock = "<%= productsData.stock %>";
       const initialDesc = "<%= productsData.description %>";
+      const initialDis = "<%= productsData.discount_price %>";
 
       const newName = document.getElementById('name').value.trim();
       const newPrice = document.getElementById('price').value.trim();
       const newStock = document.getElementById('stock').value.trim();
       const newDesc = document.getElementById('desc').value.trim();
+      const newDis = document.getElementById('disPrice').value.trim();
 
-      if (initialName === newName && initialPrice === newPrice && initialStock === newStock && initialDesc === newDesc) {
+      if (initialName === newName && initialPrice === newPrice && initialStock === newStock && initialDesc === newDesc && initialDis === newDis) {
         // No changes made, redirect to another page
         window.location.href = '/admin/products';
         event.preventDefault(); // Prevent default form submission

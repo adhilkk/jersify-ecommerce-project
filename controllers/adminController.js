@@ -45,11 +45,11 @@ const renderLogin = (req, res) => {
   const handleLogin = async (req, res) => {
     const { adminEmail, password } = req.body;
 
-    console.log(adminEmail,password);
+    
   
     try {
       const admin = await Admin.findOne({ email:adminEmail.trim() });
-      console.log(admin);
+      
   
       if (!admin) {
         return res.render('admin/adminLogin.ejs', { loginMsg: 'Invalid email or password', loginSuccess: false });
@@ -113,6 +113,7 @@ const renderLogin = (req, res) => {
   const getUsers = async (req, res) => {
     try {
       const users = await User.find({});
+      console.log(req.session.admin,"admin")
       res.render('admin/users', { clint: users });
     } catch (error) {
       res.status(500).send(error.message);
@@ -121,12 +122,12 @@ const renderLogin = (req, res) => {
   
   const toggleBlockUser = async (req, res) => {
     const userId = req.params.id;
-    console.log('fcfhgbhghg');
+    
     try {
       const user = await User.findById(userId);
       user.is_blocked = !user.is_blocked;
       await user.save();
-      console.log(user);
+      
       res.sendStatus(200);
     } catch (error) {
       res.status(500).send(error.message);

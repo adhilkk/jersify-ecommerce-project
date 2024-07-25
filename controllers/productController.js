@@ -1,4 +1,4 @@
-const Category = require("../models/categoryModel");
+const category = require("../models/categoryModel");
 const Products = require("../models/product");
 
 
@@ -15,15 +15,17 @@ const loadProducts = async (req, res) => {
     const page = parseInt(req.query.page) || 1;
     const skip = (page - 1) * limit;
 
+    
     const totalCatCount = await Products.countDocuments();
     const totalPages = Math.ceil(totalCatCount / limit);
-
+    
     const productsData = await Products.find().populate("category")
-
-      .skip(skip)
-      .limit(limit);
-
-    console.log(productsData);
+    
+    .skip(skip)
+    .limit(limit);
+    
+    
+    
 
     res.render("admin/product", { currentPage: page, totalPages, productsData });
   } catch (error) {
@@ -35,7 +37,7 @@ const loadProducts = async (req, res) => {
 
 const loadAddproduct = async (req, res) => {
   try {
-    const listcategory = await Category.find({ is_listed: true });
+    const listcategory = await category.find({ is_listed: true });
     
 
     res.render("admin/addproduct", { listcategory,});
@@ -63,16 +65,16 @@ const addProducts = async (req, res) => {
 
     });
 
-    console.log(image);
+   
 
     const currentDate = Date();
-    const categories = await Category.findOne({ name: req.body.category });
+    const categories = await category.findOne({ name: req.body.category });
 
-    const offerPorice = Math.round((req.body.price / 100) * (100 - req.body.Discountprice));
+    const offerPorice = req.body.Discountprice ? Math.round((req.body.price / 100) * (100 - req.body.Discountprice)) : 0
 
-    console.log(categories + "aaa");
+   console.log(req.body.Discountprice);
   
-    
+  console.log(offerPorice);    
 
     const product = Products.create({
       name: req.body.product,
@@ -87,9 +89,9 @@ const addProducts = async (req, res) => {
       status: req.body.radio,
     });
 
-    console.log("helo")
+    
 
-    console.log(product+"hiii");
+    
 
     res.redirect("/admin/products");
 
@@ -102,9 +104,9 @@ const addProducts = async (req, res) => {
 const loadeditProduct = async (req, res) => {
   try {
     const productId = req.query.id;
-    const listcategory = await Category.find({ is_listed: true });
+    const listcategory = await category.find({ is_listed: true });
     const productsData = await Products.findById({ _id: productId });
-    console.log(productsData._id)
+    
     res.render("admin/productEdit", { productsData,listcategory });
   } catch (error) {}
 };
@@ -135,16 +137,17 @@ const productStatus = async (req, res) => {
 
 const editProduct = async (req, res) => {
 try {
-  console.log("hiii edit product")
-  console.log(req.files);
-  
+ 
+  console.log("a");
     const produt= await Products.findOne({_id:req.params.id});
     const {product,price,Discountprice,stock,description,category}=req.body;
-    console.log(category,"cat")
-    const categories = await Category.findOne({ name: category });
-    console.log(categories,"cat2")
 
-console.log(product);
+    console.log(Discountprice,"1111");
+   
+    
+    
+
+
 
     let imag=[];
 

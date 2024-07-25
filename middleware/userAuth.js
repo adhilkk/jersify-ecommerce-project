@@ -1,34 +1,82 @@
-const User = require('../models/userModel');
+const User = require('../models/userModel')
 
-const isLogin = async (req, res, next) => {
+const user = async(req , res , next)=>{
+
     try {
-        const user = await User.findOne({ _id: req.session.userId });
-        console.log(user);
-        if (!user || user.is_Blocked === 1) {
-            req.session.destroy();
-            res.redirect('/userlogin')
-            return;
+
+        if(!req.session.user){
+
+            res.redirect('/login')
+    
+        } else {
+    
+            next()
+    
         }
-        next();
+    
+        
     } catch (error) {
-        console.log(error.message);
+
+        console.log(error);
+        
     }
-}
+  
+};
+const loginUser = async(req , res , next)=>{
 
-const isLogout = async (req, res, next) => {
+ try {
+
+    if(req.session.user){
+
+        res.redirect('/')
+        
+
+    } else {
+
+        next()
+
+    }
+    
+ } catch (error) {
+
+    console.log(error);
+    
+ }
+
+};
+
+const blockuser = async(req,res , next)=>{
     try {
-        if (req.session.userId) {
-            console.log(req.session.userId);
-            res.redirect('/');
+        if(req.session.user)
+        {
+           const userData =await User.findOne({_id:req.session.user._id})
+
+           if(userData.is_blocked == true)
+           {
+
+            delete req.session.user
+            return res.redirect('/login')
+
+           } else {
+
+            next()
+
+           }
+
+        }else {
+
+            next()
 
         }
-        next();
     } catch (error) {
-        console.log(error.message);
+        
     }
 }
 
 module.exports = {
-    isLogin,
-    isLogout
+
+    user,
+    loginUser,
+    blockuser,
+
 }

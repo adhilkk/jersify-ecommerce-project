@@ -1,3 +1,4 @@
+const cart = require('../models/cart')
 const Cart = require ('../models/cart')
 const category = require ('../models/categoryModel')
 const PRODUCTS = require ('../models/product')
@@ -19,6 +20,7 @@ const cartLoad = async ( req ,res ) => {
         
 
         const updateCart = userProduct.product.reduce((acc , val) => acc + val.price , 0)
+       
 
         const newPrice = await Cart.findOneAndUpdate({userId : req.session.user._id} , {$set : {Total_price : updateCart}} , {new : true , upsert : true});
         
@@ -45,19 +47,20 @@ const cartLoad = async ( req ,res ) => {
 const addCart = async ( req , res ) => {
 
     try {
-        console.log(req.query.qty);
-
+        
         if(req.session.user){
             const proId = req.query.id
             const userIdd = req.session.user._id
             const quantity = req.query.qty || 1
 
-            console.log(quantity,"ASDFGHJK");
+            
 
             
 
         const cartProduct = await PRODUCTS.findOne({_id:proId});
-        console.log(cartProduct);
+       
+       
+            console.log(cartProduct,'cartProduct');
 
        
 
@@ -65,16 +68,17 @@ const addCart = async ( req , res ) => {
 
         if(!exist){
             
-            const total = cartProduct.discount > 0 ? cartProduct.dis_price * quantity : cartProduct.price * quantity
+            const total = cartProduct.discount > 0 ? cartProduct.dis_price * quantity : cartProduct.price * quantity;;
            
-
            await Cart.findOneAndUpdate({userId:userIdd},
 
             {$addToSet:{
-
+  
                 product:{productId:proId,
 
-                price: total,quantity:quantity
+                price: total,
+                quantity:quantity,
+                discountAmount:cartProduct.discount,
             }
 
             }},{new:true ,upsert:true})
@@ -105,9 +109,9 @@ const cartEdit = async (req, res) => {
         const {proId , cartId,quantity} = req.body;
      
       const product = await PRODUCTS.findOne({ _id: proId });
-      console.log(product,"GGGGGG");
+     
       const newval = product.discount > 0 ? product.dis_price * quantity : product.price * quantity;
-      console.log(newval,"JJJJJ");
+      
       
       const updatedCart = await Cart.findOneAndUpdate(
 
@@ -115,10 +119,10 @@ const cartEdit = async (req, res) => {
 
         {$set: { "product.$.price": newval,"product.$.quantity": req.body.quantity,},},{ new: true });
 
-        console.log(updatedCart,"UUUUUU");
+       
       
       const total = updatedCart.product.reduce((acc, product) => acc + product.price,0);
-      console.log(total,"TTTTT");
+      console.log(total,'total');
   
        await Cart.findByIdAndUpdate(
 
@@ -149,9 +153,10 @@ const deleteCart = async(req , res)=>{
 
         
 
-        const deleteCartt = await Cart.findOneAndUpdate({userId : req.session.user._id} , {$pull : {product : {productId : proId}}});
+        const deleteCartt = await Cart.findOneAndUpdate({userId : req.session.user._id} , {$pull :{product : {productId : proId}}});
+        const deleteCartta = await Cart.findOneAndUpdate({userId : req.session.user._id} , {$set :{discountAmount:[]}});
 
-        if(deleteCartt){
+        if(deleteCartt ||deleteCartta){
 
             res.send({succ : true})
 

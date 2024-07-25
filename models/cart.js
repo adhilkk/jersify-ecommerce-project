@@ -7,7 +7,8 @@ const newcart = new mongoose.Schema({
     product : [{
         productId : {type : mongoose.Schema.Types.ObjectId , ref :'product',},
         quantity:{type:Number,required:true,default:1},
-        price : {type : Number , required : true}
+        price : {type : Number , required : true},
+        discountAmount: {type : Number , required : true},
     }],
     
     Total_price : {
@@ -20,7 +21,7 @@ const newcart = new mongoose.Schema({
         type: String,
         required: true
     
-    },
+    }, 
 
     coupenDisPrice: {
         
@@ -29,6 +30,8 @@ const newcart = new mongoose.Schema({
         default: 0
 
     },
+    
+    
 
     percentage: {
         

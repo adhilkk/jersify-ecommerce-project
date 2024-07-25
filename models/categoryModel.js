@@ -10,7 +10,7 @@ const category = new mongoose.Schema({
         require :true,
         type : Boolean,
         default:true
-     }
+     },
 })
 
 module. exports = mongoose.model('Category',category)

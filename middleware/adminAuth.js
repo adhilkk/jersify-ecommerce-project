@@ -7,7 +7,7 @@ const isLogin = async (req, res, next) => {
             next();
 
         } else {
-
+            console.log("is login else");
             res.redirect("/admin");
 
         }

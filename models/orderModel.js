@@ -46,8 +46,8 @@ const Order = mongoose.Schema({
         required: true,
         default: 0
 
-    },
-
+    }
+,
     orderStatus: {
         
         type: String,

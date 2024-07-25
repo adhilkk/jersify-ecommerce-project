@@ -4,6 +4,7 @@ const Product = require("../models/product");
 const Category = require("../models/categoryModel");
 const Order = require('../models/orderModel');
 const Cart = require('../models/cart');
+const Wallet = require("../models/wallet");
 
 
 const loadOrder = async (req, res , next) => {
@@ -35,10 +36,11 @@ const loadOrder = async (req, res , next) => {
             const orderData = await Order.find({ userId: req.session.user._id })
                 
                 .populate("products.productId")
+            
                 .skip(skip)
                 .limit(limit);
-
-                console.log(orderData);
+ 
+                
 
             res.render("users/orders", {
 
@@ -93,6 +95,7 @@ const orderRecieved = async (req, res , next) => {
     try {
 
         const userIdd = req.session.user._id
+        const user = req.session.user;
 
         if (userIdd) {
 
@@ -112,6 +115,81 @@ const orderRecieved = async (req, res , next) => {
 
             } else {
 
+
+                 
+
+                const existingOrders = await Order.findOne({ userId: userIdd });
+                let isFirstOrder = false;
+                let referedCode = null;
+        
+                if (!existingOrders) {
+                    isFirstOrder = true;
+                    referedCode = user.referedCode; 
+                    
+                    if (referedCode) {
+                       
+                        const referedUser = await User.findOne({ referenceCode: referedCode });
+                        if (referedUser) {
+                            const referedUserId = referedUser._id;
+                            let referedUserWallet = await Wallet.findOne({ userId: referedUserId });
+                            if (!referedUserWallet) {
+                                referedUserWallet = new Wallet({
+                                    userId: referedUserId,
+                                    balance: 50,
+                                    history: [{
+                                        amount: 50,
+                                        transactionType: "Referal bonus",
+                                        previousBalance: 0
+                                    }]
+                                });
+                            } else {
+                                referedUserWallet.balance += 50;
+                                referedUserWallet.history.push({
+                                    amount: 50,
+                                    transactionType: "Referal bonus",
+                                    previousBalance: referedUserWallet.balance - 50
+                                });
+                            }
+                            await referedUserWallet.save();
+                         
+        
+                            let currentUserWallet = await Wallet.findOne({ userId: userIdd });
+                            if (!currentUserWallet) {
+                                currentUserWallet = new Wallet({
+                                    userId: userIdd,
+                                    balance: 30,
+                                    history: [{
+                                        amount: 30,
+                                        transactionType: "First order bonus",
+                                        previousBalance: 0
+                                    }]
+                                });
+                            } else {
+                                currentUserWallet.balance += 30;
+                                currentUserWallet.history.push({
+                                    amount: 30,
+                                    transactionType: "First order bonus" ,
+                                    previousBalance: currentUserWallet.balance - 30
+                                });
+                            }
+                            await currentUserWallet.save();
+                        
+                        }
+                    }
+                }
+
+
+
+
+
+
+
+
+
+
+
+
+
                 const peyMethod = req.body.peyment
         
                 const cartt = await Cart.findOne({ userId: userIdd });
@@ -121,15 +199,20 @@ const orderRecieved = async (req, res , next) => {
                 const addresss = await Address.findOne({ userId: userIdd, 'addresss.status': true }, { 'addresss.$': 1 });
         
                 const product = cartt.product;
-        
                 const { name, phone, address, pincode, locality, state, city } = addresss?.addresss?.[0] ?? {};
-        
+
+                console.log(product,'aaaaaaaaaaaaaproduct');
+
+
+                const sumDiscount= product.reduce((acc, val) => acc + val.discountAmount, 0);
+
+
                 const orderGot = await Order.create({
         
                     userId: userIdd,
                     products: product,
                     
-                    deliveryAddress: {
+                    deliveryAddress: { 
                         
                         name: name,
                         phone: phone,
@@ -144,12 +227,14 @@ const orderRecieved = async (req, res , next) => {
                     orderDate: Date.now(),
                     orderAmount: cartt.Total_price,
                     payment: peyMethod,
-                    coupenDis: cartt.coupenDiscount,
-                    percentage: cartt.percentage
+                    coupenDis:sumDiscount,
+                    percentage: cartt.percentage,
         
                 });
                 
                 req.session.orderGot = orderGot
+
+                console.log(orderGot,'orderGot');
 
                 // if (req.body.peyment == 'wallet') {
 
@@ -190,10 +275,20 @@ const orderRecieved = async (req, res , next) => {
                         await Product.findOneAndUpdate({ _id: e.productId }, { $set: { stock: newStock } });
             
                     });
+                    
+                    // orderGot.products.forEach(async (e) => {
+            
+                    //     // let sum = await Product.findOne({ _id: e.productId });
+            
+                    //     let newsum = newsum+e.discountAmount;
+            
+                    //     await Order.findOneAndUpdate({ userId: userIdd,}, { $set: { coupenDis: newsum } });
+            
+                    // });
             
                     //  Update Cart :-
             
-                    const cartRemove = await Cart.updateOne({ userId: userIdd }, { $unset: { products: 1 }, $set: {Total_price: 0, coupenDiscount: 0, percentage: 0 } });
+                    const cartRemove = await Cart.updateOne({ userId: userIdd }, { $unset: { product : 1, }, $set: {Total_price: 0, coupenDisPrice: 0, percentage: 0 } });
                         
                     if (cartRemove) {
             
@@ -201,7 +296,7 @@ const orderRecieved = async (req, res , next) => {
             
                     } else {
                             
-                        console.log("poyi");
+                      
             
                     }
         
@@ -252,7 +347,7 @@ const loadThanks = async (req, res , next) => {
 
 //  orderCancel (Post Method) :-
 
-const orderCancel = async (req, res , next) => {
+const orderCancel = async (req, res ,) => {
     
     try {
 
@@ -279,122 +374,88 @@ const orderCancel = async (req, res , next) => {
             
         )
 
+        
         //  Adding Stock Back :-
 
         const orderFind = await Order.findOne({ _id: ordId, "products.productId": proId, "products.canceled": true, }, { "products.$": 1, });
 
-        let findOrd; 
-        let ordVal;  
-        let moneyDecrese 
-
         if (orderFind) {
             
-            const getQuantity = orderFind.products[0].quantity;     
-
-            console.log(getQuantity + 'Quantity');
+            const getQuantity = orderFind.products[0].quantity;
     
             await Product.findOneAndUpdate({ _id: proId }, { $inc: { stock: getQuantity } });
 
-           
+            //  Manage The Money :-
+
+            const moneyDecrese = orderFind.products[0].price
+
+            await Order.findOneAndUpdate({ _id: ordId, 'products.productId': proId }, { $inc: { orderAmount: -moneyDecrese } });
 
         }
+        //  CancelProduct Amount Adiing The Wallet :-
 
-       
+        if (cancelOrd.peyment != 'COD') {
+            
+            await Wallet.findOneAndUpdate({ userId: userIdd },
+            
+                {
+                    $inc: { balance: price },
+                    $push: { history: { amount: price, transactionType: 'credit' } }
+                },
+                
+                { new: true, upsert: true }
+
+            );
+
+            res.send({ succ: true });
+
+        } else {
+
+            res.send({ fail: true });
+        }
 
     } catch (error) {
 
-        next(error,req,res);
-
+        console.log(error.message);
         
     }
 
-};
+}
+
+
+       
+
+       
+
+  
 
 //  ReturnOrder (Post Method) :-
 
-const returnOrd = async (req, res , next) => {
+const returnOrd = async (req, res) => {
     
     try {
-
-        const { proId, ordId, price, reason } = req.body;
+ 
+        const { proId, ordId,  reason } = req.body;
         const userIdd = req.session.user._id
-
-        // if (req.session.user) {
-            
-        //     const returnOrdd = await Order.findOneAndUpdate(
-            
-        //         { _id: ordId, "products.productId": proId },
-              
-        //         {
-                  
-        //             $set: {
-                    
-        //                 "products.$.orderProStatus": "canceled",
-        //                 "products.$.canceled": true,
-        //                 "products.$.reason": reason,
-                  
-        //             },
-                    
-        //         },
-              
-        //         { new: true }
-              
-        //     );
-
-        //     //  Adding Stock Back :-
-
-        //     const findOrder = await Order.findOne({ _id: ordId, 'products.productId': proId, 'products.canceled': true }, { 'products.$': 1 });
-
-        //     if (findOrder) {
-                
-        //         const findStock = findOrder.products[0].quantity;
-                
-        //         await Product.findOneAndUpdate({ _id: proId }, { $inc: { stock: findStock } });
-
-        //         //  Money Managing :-
-                
-        //         const moneyDecreses = findOrder.products[0].price;
-
-        //         await Order.findOneAndUpdate({ _id: ordId, 'products.productId': proId }, { $inc: { orderAmount: -moneyDecreses } });
-
-        //     }
-
-        //     //  CancelProduct Money Adding Wallet :-
-
-        //     if (returnOrdd.peyment !== 'Cash on Delivery') {
-                
-        //         await Wallet.findOneAndUpdate({ userId: userIdd }, { $inc: { balance: price }, $push: { transaction: { amount: price, creditOrDebit: 'credit' } } }, { new: true, upsert: true });
-
-        //         res.send({ succ: true })
-
-        //     } else {
-
-        //         res.send({ fail: true })
-
-        //     }
-
-        // }
-        
         
         //  Return Product :-
         
-        const returnMasg = await Order.findOneAndUpdate(
-        
-            { _id: ordId, "products.productId": proId },
-          
-            {
-                $set: {
-                    "products.$.retruned": true,
-                    "products.$.reason": reason,
-                    "products.$.forButton": true,
-                },
-            }
-          
-        );
+        const b = await Order.updateOne({_id : ordId} ,  {$set : {for : true}});
 
-        if (returnMasg) {
+        const returnMasg = await Order.findOneAndUpdate({ _id: ordId, 'products.productId': proId }, {
+
+            $set: {
+
+                'products.$.retruned': true, "products.$.reason": reason,
+
+            }
+
+        });
+
+
+        if (returnMasg && b) {
          
-           
+            
          
         } else {
 
@@ -404,12 +465,16 @@ const returnOrd = async (req, res , next) => {
 
     } catch (error) {
 
-        next(error,req,res);
-
+        console.log(error.message);
         
     }
 
 };
+
+
+
+
+  
 
 
 
@@ -421,6 +486,7 @@ module.exports = {
     orderView,
     orderCancel,
     returnOrd,
+    
     
 
 };

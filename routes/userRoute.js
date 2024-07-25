@@ -6,7 +6,9 @@ const cart_controller= require('../controllers/cartController');
 const profile_controller= require('../controllers/userprofile');
 const address_controller= require('../controllers/addressController');
 const checkoutController= require('../controllers/checkoutController');
+const user_coupen= require('../controllers/coupenController');
 const orderController= require('../controllers/orderController');
+const user_wishlist= require('../controllers/userWshlist');
 const userAuth = require('../middleware/userAuth')
 const passport = require('passport')
 require('../passport')
@@ -23,18 +25,10 @@ const multer = require("multer");
 const path = require("path");
 user_router.use(express.static('public'))
 
-
-
-user_router.get('/wishlist', (req, res) => {
-  res.render('../views/users/wishlist.ejs', { title: 'Login' });
-});
-
-
-
  
 user_router.get('/' , user_Controller.loadHome)
 user_router.post('/login',user_Controller.login_user);
-user_router.get('/login' , user_Controller.loadLogin)
+user_router.get('/login' ,userAuth.loginUser, user_Controller.loadLogin)
 user_router.get('/logout' , user_Controller.loadLogout)
 user_router.get('/shop' , user_Controller.loadShop)
 
@@ -66,7 +60,7 @@ user_router.get('/failure' , user_Controller.failureGoogleLogin);
 	
 //user profile 
 	
-user_router.get('/profile',profile_controller.profileLoad)
+user_router.get('/profile',userAuth.user,profile_controller.profileLoad)
 user_router.post('/editProfile',profile_controller.editProfile)
 user_router.post('/editPassword',profile_controller.passCange)
 user_router.get('/Address',address_controller.loadAddress)
@@ -86,7 +80,7 @@ user_router.get('/productDetails',user_Controller.productDetails)
 // cart
 
 
-user_router.get('/cart',cart_controller.cartLoad)
+user_router.get('/cart',userAuth.user,cart_controller.cartLoad)
 user_router.post('/addCart',cart_controller.addCart)
 user_router.put('/cartUpdate' , cart_controller.cartEdit)
 user_router.put('/deleteCart' , cart_controller.deleteCart);
@@ -122,5 +116,61 @@ user_router.post('/deleteCheckAdd', checkoutController.deleteAdd);
 
 
 
+
+
+
+
+//  razorPay (post)
+user_router.post("/razorPay", checkoutController.RazorPay);
+
+//  razorpPay Failed (post)
+user_router.post("/failedRazorpay", checkoutController.failRazorpay);
+
+//  razorpay for failedPayment (post)
+user_router.post('/sucRazorpay', checkoutController.sucRazorpay);
+
+
+
+
+
+//  Coupen Section :-
+
+//  Coupen (get)
+user_router.get('/coupen', user_coupen.loadCoupen);
+
+
+//  coupenCheck (post)
+user_router.post("/coupenCehck", user_coupen.coupenCheck);
+
+//  useCoupen (post)
+user_router.post('/useCoupen', user_coupen.useCoupen);
+
+//  removeCouepn (put)
+user_router.put('/removeCop', user_coupen.remove);
+
+
+
+
+//  Search Producct (put)
+user_router.put("/searchProduct", user_Controller.searchProduct);
+
+
+//  Wishlist Section :-
+
+//  wishList (get)
+user_router.get('/wish', user_wishlist.loadWishlist);
+
+//  addWishlist (post)
+user_router.post('/addWishlist', user_wishlist.addWishlist);
+
+//  removeWishlist (put)
+user_router.put('/removeWishlist', user_wishlist.removeWishlist);
+
+
+
+// filter on category
+
+user_router.post("/filterByCategory", user_Controller.filterByCategory);
+user_router.get("/wallet", user_Controller.loadWallet);
 
 module.exports = user_router;

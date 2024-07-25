@@ -5,7 +5,13 @@ const user = new mongoose.Schema({
   email: { type: String, required: true },
   phoneNumber: { type: Number },
   password: { type: String },
-  is_blocked: {type: Boolean,default: false}
+  is_blocked: {type: Boolean,default: false},
+  referenceCode:{
+    type:String
+  },
+  referedCode:{
+    type:String
+  }
 
 });
 
