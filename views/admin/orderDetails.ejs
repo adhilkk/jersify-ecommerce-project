@@ -33,6 +33,7 @@
                 <div class="modal-footer">
 
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+
                 <button type="button" id="sure" onclick="acceptReturn(this)" class="btn btn-primary"data-bs-dismiss="modal">YES</button>
 
                 </div>
@@ -169,6 +170,8 @@
 
                                                             <% ordDettails.products.forEach((product)=>{ %>
 
+                                                                <% console.log(product) %>
+
                                                                 <% if (product.retruned == true) { %>
 
                                                                     <% if (ordDettails.orderAmount !== 0 ) { %>
@@ -182,9 +185,12 @@
                                                                             <td><%= product.price %>.00</td>
 
                                                                             <td> 
-                                                                            
+                                                                            <% if(product.orderProStatus==='returned'){ %>
                                                                             <button onclick="idchange('<%= product._id %>')" data-bs-toggle="modal" data-bs-target="#staticBackdrop" class="btn btn-outline-success">return request</button>
-                                                                                    
+                                                                             <% } else{ %> 
+                                                                                <p>returned</p>    
+                                                                                
+                                                                                <% } %>
                                                                             </td>
                                                                                         
                                                                         </tr>

@@ -41,21 +41,39 @@ const sendOTP = (email, otp) => {
     }
   });
 };
+// const registerPage = async (req,res)=>{
+//   try {
+//     res.render("users/register");
+//   } catch (error) {
+//     res.status(400).send(error.message)
+//   }
+// }
 
 const loadRegister = async (req, res) => {
   try {
+    const categoryData = await category.find({is_listed: true})
 
     const referedCode = req.query.referenceCode;
+
     req.session.referedCode = referedCode;
+
     if (referedCode) {
+
       console.log("referenceCode is::::::::::::::::", referedCode);
+
     } else {
+      
       console.log("Error in getting referenceCode");
+
     }
-    res.render("users/register");
+    const msg = req.flash('flash')
+    res.render("users/register" , {pswMsg : msg,categoryData});
+
   } catch (error) {
-    res.status(400).send(error.message);
+
+    console.log(error.message);
   }
+
 };
 
 const register_user = async (req, res) => {
@@ -68,10 +86,8 @@ const register_user = async (req, res) => {
   } = req.body;
 
   if (registerPassword !== registerCpassword) {
-    return res.render("users/register", {
-      pswMsg: "Passwords do not match",
-      success: false,
-    });
+    req.flash('flash' , 'Passwords do not match')
+   return res.redirect("/registerPage");
   }
 
   const securePassword = async (password) => {
@@ -79,8 +95,7 @@ const register_user = async (req, res) => {
       const passwordHash = await bcrypt.hash(password, 10);
       return passwordHash;
     } catch (error) {
-      res.status(400).send(error.message);
-    }
+      console.log(error.message);    }
   };
 
   try {
@@ -90,16 +105,14 @@ const register_user = async (req, res) => {
 
     const userData = await User.findOne({ email: registerEmail });
     if (userData) {
-      res.render("users/register", {
-        registerMsg: "Email already exists",
-        registerSuccess: false,
-      });
+      req.flash('flash' , "Email already exists")
+      return res.redirect("/registerPage");
     } else {
       otpStorage[registerEmail] = {
         fullName: userFullName,
         email: registerEmail,
         password: spassword,
-        phoneNumber: registerPhone,
+        phoneNumber: registerPhone, 
         otp: otp,
         otpTimestamp: otpTimestamp,
       };
@@ -108,7 +121,7 @@ const register_user = async (req, res) => {
       res.render("users/otp", { email: registerEmail });
     }
   } catch (error) {
-    res.status(400).send(error.message);
+    console.log(error.message);
   }
 };
 
@@ -164,8 +177,7 @@ const verify_otp = async (req, res) => {
       res.render("users/otp", { otpMsg: "Invalid OTP", email: email });
     }
   } catch (error) {
-    res.status(400).send(error.message);
-  }
+    console.log(error.message);  }
 };
 
 const resend_otp = async (req, res) => {
@@ -189,23 +201,22 @@ const resend_otp = async (req, res) => {
 
 const loadLogin = async (req, res) => {
   try {
+    const categoryData = await category.find({is_listed: true})
     if (req.session.user) {
-      res.redirect("/");
+      return res.redirect("/");
     } else {
       const msg = req.flash("flash");
-      res.render("users/login", { msgg: msg });
+      return res.render("users/login", { msgg: msg ,categoryData});
     }
   } catch (error) {
-    res.status(400).send(error.message);
-  }
+console.log(error.message);  }
 };
 
 const loadShop = async (req, res) => {
   try {
     res.render("users/product");
   } catch (error) {
-    res.status(400).send(error.message);
-  }
+console.log(error.message);  }
 };
 
 const login_user = async (req, res) => {
@@ -215,7 +226,7 @@ const login_user = async (req, res) => {
 
     if (!userData) {
       req.flash("flash", "Invalid Email");
-      res.redirect("/login");
+      return res.redirect("/login");
     }
 
     if (userData) {
@@ -223,22 +234,21 @@ const login_user = async (req, res) => {
 
       if (check) {
         if (userData.is_blocked) {
-          res.redirect("/users/login", {
+          return res.redirect("/users/login", {
             error: "Your account is blocked. Please contact support.",
           });
         }
         req.session.user = userData;
-        res.redirect("/");
+       return  res.redirect("/");
       } else {
         if (!check) {
           req.flash("flash", "Invalid Password");
-          res.redirect("/login");
+          return res.redirect("/login");
         }
       }
     }
   } catch (error) {
-    res.status(400).send(error.message);
-  }
+console.log(error.message);  }
 };
 
 const products = async (req, res) => {
@@ -309,10 +319,11 @@ const failureGoogleLogin = (req, res) => {
 
 const loadHome = async (req, res) => {
   try {
+    const categoryData = await category.find({is_listed: true})
     if (req.session.user) {
-      res.render("users/home", { login: req.session.user });
+      res.render("users/home", { login: req.session.user,categoryData });
     } else {
-      res.render("users/home");
+      res.render("users/home",{categoryData});
     }
   } catch (error) {
     console.log(error.message);
@@ -576,12 +587,68 @@ const generateRandomId = () => {
   }
   return randomId;
 };
+const loadcategory = async (req, res) => {
+
+  try {
+  
+  const id = req.params.id;
+
+  //   const categoryName = id.replace(/%20/g, " ");
+
+    const categoryData = await category.find({ is_listed: true });
+
+    const productt = await product.aggregate([
+
+      { $match: { status: true } },
+
+      {
+
+        $lookup: {
+
+          from: "categories",
+          localField: "category",
+          foreignField: "_id",
+          as: "category",
+
+        },
+
+      },
+
+      { $unwind: "$category" },
+
+      { $match: { "category.name": id } },
+
+    ]);
+
+    if (req.session.user) {
+
+        res.render("users/catagory", {
+        login: req.session.user,
+        categoryData,
+        productt,
+        
+      });
+
+    } else {
+
+      res.render("users/catagory", { categoryData, productt });
+
+    }
+
+  } catch (error) {
+      
+    console.log(error.message);
+
+  }
+
+};
 
 
 
 
 module.exports = {
   loadRegister,
+  // registerPage,
   register_user,
   login_user,
   verify_otp,
@@ -606,4 +673,5 @@ module.exports = {
   searchProduct,
   filterByCategory,
   loadWallet,
+  loadcategory,
 };

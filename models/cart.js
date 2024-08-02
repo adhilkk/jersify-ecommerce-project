@@ -9,6 +9,7 @@ const newcart = new mongoose.Schema({
         quantity:{type:Number,required:true,default:1},
         price : {type : Number , required : true},
         discountAmount: {type : Number , required : true},
+        disAmount: { type: Number,required: true,default: 0}
     }],
     
     Total_price : {

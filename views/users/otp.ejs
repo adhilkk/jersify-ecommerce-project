@@ -369,52 +369,59 @@
     <!-- Main JS File -->
     <script src="assets/js/main.js"></script>
     
+
+
 <script>
-    let timer = 60;
-    const timerElement = document.getElementById('timer');
-    const resendBtn = document.getElementById('resend-btn');
-  
-    const countdown = setInterval(() => {
-      timer--;
-      timerElement.textContent = timer;
-      if (timer === 0) {
-        clearInterval(countdown);
-        resendBtn.disabled = false;
-      }
-    }, 1000);
-  
-    function resendOTP() {
-      fetch('/resend-otp', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email: '<%= email %>' }),
-      })
-        .then(response => response.json())
-        .then(data => {
-          if (data.success) {
-            alert('OTP resent successfully');
-            timer = 60;
-            resendBtn.disabled = true;
-            resendBtn.style.backgroundColor = '#cccccc';
-            countdown = setInterval(() => {
-              timer--;
-              timerElement.textContent = timer;
-              if (timer === 0) {
-                clearInterval(countdown);
-                console.log("qwedrfhjhnbv");
-                resendBtn.style.backgroundColor = '#008CBA';
-                resendBtn.disabled = false;
-              }
-            }, 1000);
-          } else {
-            alert('Failed to resend OTP');
-          }
-        });
+  let timer = 60;
+  const timerElement = document.getElementById('timer');
+  const resendBtn = document.getElementById('resend-btn');
+
+  let countdown = setInterval(() => {
+    timer--;
+    timerElement.textContent = timer;
+    if (timer === 0) {
+      clearInterval(countdown);
+      resendBtn.disabled = false;
     }
-    resendBtn.addEventListener('click', resendOTP);
-  </script>
+  }, 1000);
+
+  function resendOTP() {
+    fetch('/resend-otp', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email: '<%= email %>' }),
+    })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          alert('OTP resent successfully');
+          timer = 60;
+          resendBtn.disabled = true;
+          resendBtn.style.backgroundColor = '#cccccc';
+          countdown = setInterval(() => {
+            timer--;
+            timerElement.textContent = timer;
+            if (timer === 0) {
+              clearInterval(countdown);
+              resendBtn.style.backgroundColor = '#008CBA';
+              resendBtn.disabled = false;
+            }
+          }, 1000);
+        } else {
+          alert('Failed to resend OTP');
+        }
+      })
+      .catch(error => {
+        console.error('Error resending OTP:', error);
+        alert('An error occurred while resending OTP. Please try again later.');
+      });
+  }
+
+  resendBtn.addEventListener('click', resendOTP);
+</script>
+
 </body>
 
 

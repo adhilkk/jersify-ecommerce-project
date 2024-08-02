@@ -216,7 +216,7 @@
 
   // Stock validation
   const stock = document.getElementById('stock').value.trim();
-  if (stock === '' || isNaN(stock) || parseInt(stock) < 1) {
+  if (stock === '' || isNaN(stock) || parseInt(stock) < -1) {
     document.getElementById('stock-error').textContent = 'Please enter a valid stock';
     isValid = false;
   }

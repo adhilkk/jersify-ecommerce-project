@@ -19,14 +19,14 @@ const loadWishlist = async (req, res) => {
     
     try {
 
-        console.log("1");
+
         const categoryData = await Category.find({ is_Listed: true });
 
-        console.log("2");
+     
         if (req.session.user) {
-            console.log("3");
+          
 
-            // const wishlistData = await Wishlist.findOne({ userId: req.session.user._id }).populate('products.productId');
+            // const wishlistData = await Wishlist.findOne({ userId: req.session.user._id }).populate('products.productId'); 
             const wishlistData = await Wishlist.findOne({ userId: req.session.user._id }).populate('products.productId');
          
             if (wishlistData) {

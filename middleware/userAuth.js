@@ -55,7 +55,7 @@ const blockuser = async(req,res , next)=>{
            {
 
             delete req.session.user
-            return res.redirect('/login')
+             res.redirect('/login')
 
            } else {
 

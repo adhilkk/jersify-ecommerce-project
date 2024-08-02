@@ -2,6 +2,7 @@ const Address = require("../models/address");
 const User = require("../models/userModel");
 const Product = require("../models/product");
 const Category = require("../models/categoryModel");
+const Coupen = require('../models/coupen_model');
 const Cart = require('../models/cart');
 const Order = require('../models/orderModel');
 const razorPay = require('../controllers/razorpay');
@@ -14,7 +15,7 @@ const loadCheckout = async (req, res , next) => {
     
     try {
 
-        const cartData = await Cart.findOne({ userId: req.session.user._id });
+       
         
 
         const categoryData = await Category.find({ is_Listed: true });
@@ -31,8 +32,9 @@ const loadCheckout = async (req, res , next) => {
             const cartDataa = await Cart.findOne({ userId: req.session.user._id }).populate('product.productId');
 
             
-        
+         
             if (cartDataa) {
+                const coupenData = await Coupen.find({ status: true });
 
                
                 let newTprice = cartDataa.product.reduce((acc, val) => acc + val.price, 0);
@@ -41,9 +43,10 @@ const loadCheckout = async (req, res , next) => {
                 
                 const cartData = await Cart.findOneAndUpdate({ userId: req.session.user._id }, { $set: { totalCartPrice: newTprice } }, { upsert: true, new: true });
 
-                
+                const b= cartData.product.disAmount
+                console.log(b,'11111111111');
                             
-                res.render("users/checkout", { login: req.session.user, categoryData, addres: addresData, userData, msgg: msg ,cartData,newTprice});
+                res.render("users/checkout", { login: req.session.user,coupenData, categoryData, addres: addresData, userData, msgg: msg ,cartData,newTprice});
                 
             } else {
 
@@ -68,70 +71,69 @@ const loadCheckout = async (req, res , next) => {
 };
 
 
-
-const verifyCheckOutAddress = async (req, res , next) => {
-
+const verifyCheckOutAddress = async (req, res, next) => {
     try {
-          
-        const userId = req.query.id
-                  
-        const exist = await Address.findOne({ userId: userId, addresss: { $elemMatch: { address: req.body.addressData.address } } });
+        const userId = req.query.id;
+        const newAddress = req.body.addressData;
+
+        // Set the status of the current default address to false
+        await Address.updateOne(
+            { userId: userId, "addresss.status": true },
+            { $set: { "addresss.$.status": false } }
+        );
+
+        // Check if the new address already exists
+        const exist = await Address.findOne({
+            userId: userId,
+            addresss: { $elemMatch: { address: newAddress.address } }
+        });
 
         if (!exist) {
-            
+            // Add new address with status true
             const verifyAddress = await Address.findOneAndUpdate(
-            
-              { userId: req.query.id },
-
-              {
-                  $addToSet: {
-                    
-                  addresss: {
-                        
-                        name: req.body.addressData.name,
-                        city: req.body.addressData.city,
-                        state: req.body.addressData.state,
-                        pincode: req.body.addressData.pincode,
-                        phone: req.body.addressData.phone,
-                        locality: req.body.addressData.locality,
-                        address: req.body.addressData.address,
-                        status: true,
-                    
-                    },
-                      
-                  },
-                  
+                { userId: userId },
+                {
+                    $addToSet: {
+                        addresss: {
+                            name: newAddress.name,
+                            city: newAddress.city,
+                            state: newAddress.state,
+                            pincode: newAddress.pincode,
+                            phone: newAddress.phone,
+                            locality: newAddress.locality,
+                            address: newAddress.address,
+                            status: true
+                        }
+                    }
                 },
-              
                 { new: true, upsert: true }
-              
             );
-            
+
             if (verifyAddress) {
-                
-                res.send({success : true});
-
+                res.send({ success: true });
             } else {
-
-                
-
+                res.status(500).send({ success: false, message: "Error adding address" });
             }
-            
         } else {
+            // If address already exists, update its status to true
+            const updateStatus = await Address.findOneAndUpdate(
+                { userId: userId, "addresss.address": newAddress.address },
+                { $set: { "addresss.$.status": true } },
+                { new: true }
+            );
 
-            res.status(400).send({ exist: true });
-
+            if (updateStatus) {
+                res.send({ success: true });
+            } else {
+                res.status(500).send({ success: false, message: "Error updating address status" });
+            }
         }
-        
     } catch (error) {
-
         res.status(400);
-        next(error,req,res);
-
-        
+        next(error, req, res);
     }
-
 };
+
 
 
 
@@ -282,6 +284,7 @@ const changeProStatus = async (req, res, next) => {
         if (updation) {
             
             res.send({ suc: true })
+           
 
         }
         
@@ -379,20 +382,26 @@ const failRazorpay = async (req, res) => {
     try {
 
         const userIdd = req.session.user._id
+        const user = req.session.user;
 
-        const cart = await Cart.findOne({ userId: userIdd });
+        const cartData = await Cart.findOne({ userId: userIdd });
 
-        const payMethod = req.body.payment;
+        const peyMethod = req.body.peyment
 
-        const addres = await Address.findOne({ userId: userIdd, 'addresss.status': true }, { 'addresss.$': 1 });
+        const cartt = await Cart.findOne({ userId: userIdd });
+        const addresss = await Address.findOne({ userId: userIdd, 'addresss.status': true }, { 'addresss.$': 1 });
+        const product = cartt.product;
 
-        const { name, phone, address, pincode, locality, state, city } = addres?.addresss?.[0] ?? {};
+        const { name, phone, address, pincode, locality, state, city } = addresss?.addresss?.[0] ?? {};
+         const sumDiscount= product.reduce((acc, val) => acc + val.discountAmount, 0);
+                const sumDisAmount= product.reduce((acc, val) => acc + val.disAmount, 0);
+                
 
-        const getFailedOrd = await order.create({
+        const getFailedOrd = await Order.create({
 
             userId: userIdd,
 
-            products: cart.product.map((val) => ({
+            products: cartt.product.map((val) => ({
 
                 productId: val.productId,
                 quantity: val.quantity,
@@ -413,11 +422,12 @@ const failRazorpay = async (req, res) => {
             },
 
             orderDate: Date.now(),
-            orderStatus:'payment pending',
-            orderAmount: cart.Total_price,
-            payment: payMethod,
-            coupenDis: cart.coupenDisPrice,
-            percentage: cart.percentage,
+            orderStatus:'pending',
+            orderAmount: cartt.Total_price,
+            payment: peyMethod,
+            coupenDis: cartt.coupenDisPrice,
+            percentage: cartt.percentage,
+            overallDis:sumDisAmount
 
         });
 
@@ -440,6 +450,7 @@ const failRazorpay = async (req, res) => {
 };
 
 const sucRazorpay = async (req, res, next) => {
+    console.log("aaaaaaaaaaaaaaaaaaaaaaa");
     
     try {
 

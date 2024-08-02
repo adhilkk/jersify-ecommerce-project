@@ -5,7 +5,7 @@ const Category = require("../models/categoryModel");
 const Order = require('../models/orderModel');
 const Cart = require('../models/cart');
 const Wallet = require("../models/wallet");
-
+const Sequence = require("../models/Sequence");
 
 const loadOrder = async (req, res , next) => {
 
@@ -87,7 +87,14 @@ const orderView = async (req, res , next) => {
     }
     
 };
-
+async function getNextSequence(name) {
+    const sequence = await Sequence.findOneAndUpdate(
+      { name: name },
+      { $inc: { value: 1 } },
+      { new: true, upsert: true }
+    );
+    return sequence.value;
+  }
 
 
 const orderRecieved = async (req, res , next) => {
@@ -200,15 +207,18 @@ const orderRecieved = async (req, res , next) => {
         
                 const product = cartt.product;
                 const { name, phone, address, pincode, locality, state, city } = addresss?.addresss?.[0] ?? {};
+                const orderId = await getNextSequence('orderId'); 
 
                 console.log(product,'aaaaaaaaaaaaaproduct');
 
 
                 const sumDiscount= product.reduce((acc, val) => acc + val.discountAmount, 0);
+                const sumDisAmount= product.reduce((acc, val) => acc + val.disAmount, 0);
 
 
                 const orderGot = await Order.create({
         
+                    orderId: orderId, 
                     userId: userIdd,
                     products: product,
                     
@@ -229,6 +239,7 @@ const orderRecieved = async (req, res , next) => {
                     payment: peyMethod,
                     coupenDis:sumDiscount,
                     percentage: cartt.percentage,
+                    overallDis:sumDisAmount
         
                 });
                 
@@ -473,6 +484,28 @@ const returnOrd = async (req, res) => {
 
 
 
+//  Download Invoice (Put Method) :-
+
+const downloadInvoice = async (req, res , next) => {
+    
+    try {
+
+        const ordId = req.query.id
+        
+        const ordData = await Order.find({ _id: ordId }).populate('products.productId userId')
+
+        res.render('users/invoice', { ordData })
+        
+    } catch (error) {
+
+        next(error,req,res);
+
+        
+    }
+
+};
+
+
 
   
 
@@ -486,6 +519,7 @@ module.exports = {
     orderView,
     orderCancel,
     returnOrd,
+    downloadInvoice
     
     
 

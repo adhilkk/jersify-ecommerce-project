@@ -43,7 +43,7 @@
 								<th>Name</th>
 								<th>Price</th>
 								<th>Stock Status</th>
-								<th></th>
+								<th>Actions</th>
 								<th></th>
 
 							</tr>
@@ -127,11 +127,18 @@
 
 								<td class="stock-col"><span class="<%= val.productId.stock <= 0 ? 'text-danger' : 'text-success' %>"><%= val.productId.stock <= 0 ? 'Out Of Stock' : 'In Stock' %></span></td>
 
+
 								<td class="remove-col">
 
-									<button onclick="removeFav('<%= val.productId._id %>')" class="btn-remove"><i class="icon-close"></i></button>
+									<button style="padding-right: 60px;" onclick="removeFav('<%= val.productId._id %>')" class="btn-remove"><p>Remove</p><i class="icon-close"></i></button>
+									
+									
+										<button  id="btns" onclick="addCart('<%= val.productId._id %>')" style="cursor: pointer; width: 100px; height: 30px;" <%= val.productId.stock <= 0 ? 'disabled' : '' %>>
+											<span id="crt"><%= val.stock <= 0 ? 'Out Of Stock' : 'Add to Cart' %></span>
+										</button>
 
 								</td>
+								
 
 							</tr>
 <!-- 							
@@ -264,6 +271,81 @@
 		});
 
 	};
+
+
+	//  Add Cart
+
+function addCart(id , user){
+
+if(user == 'false'){
+
+    window.location.href = '/login'
+
+} else {
+
+    fetch(`/addCart?id=${id}` , {method : 'post'})
+
+    .then(res => res.json())
+
+        .then(data =>{
+
+            cartAction();	//	Cart Count
+            
+            if(data.exist){
+                    
+                const Toast = Swal.mixin({
+
+                    toast: true,
+                    position: "top-end",
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+
+                    didOpen: (toast) => {
+
+                        toast.onmouseenter = Swal.stopTimer;
+                        toast.onmouseleave = Swal.resumeTimer;
+                    }
+
+                });
+                
+                Toast.fire({
+
+                    icon: "warning",
+                    title: "Already Added"
+
+                });
+
+            }else if(data.success){
+                            
+                const Toast = Swal.mixin({
+
+                    toast: true,
+                    position: "top-end",
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+
+                    didOpen: (toast) => {
+                        toast.onmouseenter = Swal.stopTimer;
+                        toast.onmouseleave = Swal.resumeTimer;
+                    }
+                });
+
+                Toast.fire({
+
+                    icon: "success",
+                    title: "Added TO Cart"
+                    
+                });
+            }
+
+
+        })
+
+}
+
+};
 
 	</script>
 	

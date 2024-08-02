@@ -42,7 +42,7 @@ app.set('view engine', 'ejs');
 // app.set('views','../views/users')
 
 // Database connection
-mongoose.connect('mongodb://localhost:27017/jersify')
+mongoose.connect(process.env.MONGODB)
   .then(() => console.log('MongoDB connected'))
   .catch(err => console.log(err));
 // user routes

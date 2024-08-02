@@ -78,6 +78,7 @@ const addProducts = async (req, res) => {
 
     const product = Products.create({
       name: req.body.product,
+      brand: req.body.brand,
       price: req.body.price,
       stock: req.body.stock,
       category: categories._id,
@@ -140,7 +141,7 @@ try {
  
   console.log("a");
     const produt= await Products.findOne({_id:req.params.id});
-    const {product,price,Discountprice,stock,description,category}=req.body;
+    const {product,price,Discountprice,stock,description,category,brand}=req.body;
 
     console.log(Discountprice,"1111");
    
@@ -165,7 +166,7 @@ for (let i = 0; i < 3; i++) {
 
     const offerPorice = Math.round((price / 100) * (100 - Discountprice));
 
-    await Products.findOneAndUpdate({_id:req.params.id},{$set:{name:product,price:price,discount:Discountprice,stock:stock,description:description,image:imag , dis_price : offerPorice,category:category}})
+    await Products.findOneAndUpdate({_id:req.params.id},{$set:{name:product,price:price,discount:Discountprice,stock:stock,description:description,image:imag , dis_price : offerPorice,category:category,brand:brand}})
     produt.save()
     res.redirect('/admin/products')
     

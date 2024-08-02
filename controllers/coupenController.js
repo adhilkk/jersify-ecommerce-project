@@ -12,7 +12,7 @@ const Coupen = require('../models/coupen_model');
 const loadCoupen = async (req, res) => {
     
     try {
-        
+       
         const categoryData = await Category.find({ is_Listed: true });
 
         if (req.session.user) {
@@ -20,6 +20,7 @@ const loadCoupen = async (req, res) => {
             const msg = req.flash('flash')
 
             const coupenData = await Coupen.find({ status: true });
+           
              
             res.render("users/coupen", { login: req.session.user, categoryData, coupenData, msgg: msg });
 
@@ -92,7 +93,7 @@ const addCoupen = async (req, res) => {
     
     try {
 
-        const { coupon, discount, min  } = req.body;
+        const { coupon, discount, min, max  } = req.body;
 
         const newId = generateCoupenId()
 
@@ -101,6 +102,7 @@ const addCoupen = async (req, res) => {
             name: coupon,
             discountt: discount,
             from : min,
+            to: max,
             coupenId: newId,
             image: req.files[0].filename
 
@@ -168,8 +170,10 @@ const useCoupen = async (req, res , next) => {
                             
                     const offerValue = Math.round((cartPrice) - (cartPrice * coupenDis / 100));
                     const discountedValue = cartPrice - offerValue
+                   
+
                 
-                    const updateCart = await Cart.findOneAndUpdate({ _id: cartData._id }, { $set: { Total_price: offerValue, coupenDiscount: discountedValue, percentage: coupen.discountt } }, { new: true });
+                    const updateCart = await Cart.findOneAndUpdate({ _id: cartData._id }, { $set: { Total_price: offerValue, coupenDisPrice: discountedValue, percentage: coupen.discountt } }, { new: true });
                     await User.findOneAndUpdate({ _id: req.session.user._id }, { $push: { applyCoupen: coupen.coupenId } });
                 
                     if (updateCart) {

@@ -2,6 +2,7 @@ const mongoose=require('mongoose')
 
 const productSchema=new mongoose.Schema({
    name: {type:String,required:true},
+   brand: {type:String,required:true,default:'Nike'},
     price:{type:Number,required:true},
     stock:{type:Number,required:true},
     offer:{type:Number,required:true,default:0},

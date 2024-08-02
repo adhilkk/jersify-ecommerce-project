@@ -96,7 +96,7 @@
                                             </td>
                                             
                                             <td scope="col">
-                                                <%= val._id %>
+                                                <%= val.orderId %>
                                             </td>
 
                                             <td scope="col">
@@ -196,66 +196,6 @@ function customDate(val) {
 
 }
 
-// // const form = document.getElementById('myForm');
-
-// function customDate(val){
-
-//     if(startDate.value !== '' && endDate.value !== '' ){
-        
-//         fetch('/admin/cstmReport',{
-
-//             method:'put',
-
-//             headers:{"Content-Type":'application/json'},
-
-//             body:JSON.stringify({ startDatee:startDate.value ,endDatee:endDate.value })
-
-//         }).then(res=>res.json()).then(data=>{
-
-//             if(data.getData.length > 0){
-
-//                 table.innerHTML = data.getData.map(( val,indx ) =>
-
-//                     ` <tr>
-
-//                         <td scope="col">
-//                             ${indx + 1}
-//                         </td>
-
-//                         <td scope="col">
-//                             ${val._id}
-//                         </td>
-
-//                         <td scopval="col">
-//                             ${val.deliveryAddress.name}
-//                         </td>
-
-//                         <td scope="col">
-//                             ${val.orderDate.toString().split(' ').slice(0,4).join(' ')}
-//                         </td>
-
-//                         <td scope="col">
-//                             ${val.orderAmount}
-//                         </td>
-
-//                         <td scope="col">
-//                             ${val.peyment}
-//                         </td>
-
-//                     </tr>`
-
-//                 ).join('');
-
-//             } else{
-
-//                 table.innerHTML = 'No Orders here'
-
-//             }
-
-//         })
-
-//     }
-// }
 
 
 </script>

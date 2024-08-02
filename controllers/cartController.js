@@ -69,6 +69,14 @@ const addCart = async ( req , res ) => {
         if(!exist){
             
             const total = cartProduct.discount > 0 ? cartProduct.dis_price * quantity : cartProduct.price * quantity;;
+            if(cartProduct.discount > 0){
+                disAmount=(cartProduct.price-cartProduct.dis_price)
+            }else{
+                disAmount=0
+
+            }
+            console.log(disAmount,'disAmount');
+
            
            await Cart.findOneAndUpdate({userId:userIdd},
 
@@ -79,6 +87,7 @@ const addCart = async ( req , res ) => {
                 price: total,
                 quantity:quantity,
                 discountAmount:cartProduct.discount,
+                disAmount:disAmount
             }
 
             }},{new:true ,upsert:true})

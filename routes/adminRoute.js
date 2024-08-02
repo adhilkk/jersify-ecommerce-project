@@ -38,15 +38,18 @@ const upload = multer({
   },
 });
 
-admin_router.get("/",admin_middilware.isLogout, (req, res) => {
-  res.render("../views/admin/adminLogin.ejs", { title: "admin" });
-});
-
+admin_router.get("/",admin_middilware.isLogout, adminController.renderLogin);
+ 
 
 admin_router.get("/userList",admin_middilware.isLogin,  adminController.loadusers);
 admin_router.post("/adminLogin", adminController.handleLogin);
 admin_router.post("/adminLogout", adminController.handleLogout);
 admin_router.get("/dashboard", admin_middilware.isLogin, adminController.renderDashboard);
+//  Year Chart (put)
+admin_router.put('/chartYear', adminController.chartYear);
+
+//  Month Chart (put)
+admin_router.put('/monthChart', adminController.monthChart);
 
 
 //for blocking
@@ -101,21 +104,13 @@ admin_router.put("/copenAction", coupen_controller.coupenAction);
 
 
 //  Admin Offer Section :-
-
-//  loadIffer (get)
 admin_router.get('/adminOffer',admin_middilware.isLogin,  adminOffer.loadOffer);
-
-//  addOffer (post)
 admin_router.post('/addOffer', adminOffer.addOffer);
-
-//  offerRenove (put)
 admin_router.put('/offerRemove', adminOffer.offerRemove);
 
 
-//  loadReport (get)
+//  loadReport 
 admin_router.get('/salesReport/:id',admin_middilware.isLogin, salesReportController.loadReport);
-
-//  Custom Report (put)
 admin_router.put("/cstmReport", salesReportController.customReport);
 
 

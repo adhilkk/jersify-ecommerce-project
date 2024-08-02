@@ -61,7 +61,14 @@
                               <p id="minimum" class="text-danger "></p>
 
                             </div>
-                          </div>
+
+                              <div class="ms-3">
+                                <label for="max" class="form-label">Max</label>
+                                <input type="number" class="form-control w-50 ms-3" min="1" name="max" id="max" placeholder="max">
+                                <p id="maximum" class="text-danger "></p>
+  
+                              </div>
+                            </div>
 
                           <div class="mb-3">
                             <label for="discount" class="form-label">Discount</label>
@@ -248,7 +255,7 @@
     var couponName = document.getElementById('couponName').value.trim();
     var discount = document.getElementById('discount').value.trim();
     var minimum = document.getElementsByName('min')[0].value.trim();
-    // var maximum = document.getElementsByName('max')[0].value.trim();
+     var maximum = document.getElementsByName('max')[0].value.trim();
 
     // Validation
 
@@ -266,10 +273,10 @@
       isValid = false;
     }
 
-    // if (isNaN(maximum) || maximum === '' || maximum <= 0) {
-    //   document.getElementById('maximum').textContent = 'must be a positive number';
-    //   isValid = false;
-    // }
+    if (isNaN(maximum) || maximum === '' || maximum <= 0) {
+      document.getElementById('maximum').textContent = 'must be a positive number';
+      isValid = false;
+    }
 
     if (isNaN(discount) || discount === '' || discount < 0 || discount > 60) {
       document.getElementById('dis').textContent = 'Discount rate maximujm upto 60 %';

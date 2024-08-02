@@ -44,6 +44,7 @@ const addAddress = async (req, res , next) => {
     try {
         
         const userId = req.query.id
+       
         
         const exist = await Address.findOne({ userId: userId, addresss: { $elemMatch: { address: req.body.addressData.address } } });
 
@@ -120,6 +121,51 @@ const deleteAddress = async (req, res , next) => {
 };
 
 
+const chooseAddress = async (req, res) => {
+    
+    try {
+
+        console.log("j");
+
+        const addId = req.query.id
+
+        const userIdd = req.session.user._id;
+
+        const update = await Address.bulkWrite([
+        
+            {
+              
+                updateOne: {
+                
+                    filter: { userId: userIdd, "addresss.status": true },
+                    update: { $set: { "addresss.$.status": false } },
+              
+                },
+                
+            },
+
+            {
+              
+                updateOne: {
+                
+                    filter: { userId: userIdd, "addresss._id": addId },
+                    update: { $set: { "addresss.$.status": true } },
+              
+                },
+                
+            },
+          
+        ]);
+        
+    } catch (error) {
+
+        console.log(error.message);
+        
+    }
+
+};
+
+
 const editAddress = async (req, res , next) => {
     
     try {
@@ -171,6 +217,7 @@ module.exports = {
     loadAddress,
     addAddress,
     deleteAddress,
+    chooseAddress,
     editAddress,
     verifyEditAddress,
 

@@ -33,6 +33,9 @@
                                     <th>Total</th>
                                 </tr>
                             </thead>
+
+
+                            <% if (userProduct?.product?.length >= 1) { %>
                             
                                 <% userProduct.product.forEach((product,index)=>{ %>
                                 <tbody>
@@ -53,14 +56,41 @@
                                         <td class="price-col"><%= product.productId.price %></td>
                                                                                             
                                             <td class="quantity-col">
-                                                <div class="cart-product-quantity">
-                                                    <!-- <input type="button" value="-" onclick="decrementQuantity(this)" /> -->
-                                                    <input onfocus="notFocus(this)" type="number" class="form-control"
-                                                        onchange="stock(this,'<%=product.productId.price %>','<%= product.productId._id  %>','<%= locals.userProduct._id%>') ; stockCheck(this , '<%= product.productId.stock %>')"
-                                                        value="<%= product.quantity %>" min="1" max="<%=product.productId.stock%>" step="1" data-decimals="0"
-                                                        required>
-                                                    <!-- <input type="button" value="+" onclick="incrementQuantity(this)" /> -->
-                                                </div>
+                                               <div class="cart-product-quantity">
+    <div class="input-group">
+        <div class="input-group-prepend">
+            <button class="b-dec" type="button" onclick="decreaseQuantity(this, '<%= product.productId.price %>', '<%= product.productId._id %>', '<%= locals.userProduct._id %>', '<%= product.productId.stock %>')">-</button>
+        </div>
+        <input onfocus="notFocus(this)" type="number" readonly class="form-control text-center"
+            onchange="stock(this, '<%= product.productId.price %>', '<%= product.productId._id %>', '<%= locals.userProduct._id %>'); stockCheck(this, '<%= product.productId.stock %>')"
+            value="<%= product.quantity %>" min="1" max="<%= product.productId.stock %>" step="1" data-decimals="0" required>
+            <button class="b-inc" type="button" onclick="increaseQuantity(this, '<%= product.productId.price %>', '<%= product.productId._id %>', '<%= locals.userProduct._id %>', '<%= product.productId.stock %>')">+</button>
+        <div class="input-group-append">
+        </div>
+    </div>
+</div>
+
+<script>
+    function increaseQuantity(button, price, productId, userId, maxStock) {
+        const input = button.closest('.input-group').querySelector('input[type="number"]');
+        let value = parseInt(input.value);
+        if (value < maxStock) {
+            input.value = value + 1;
+            stock(input, price, productId, userId);
+            stockCheck(input, maxStock);
+        }
+    }
+
+    function decreaseQuantity(button, price, productId, userId, maxStock) {
+        const input = button.closest('.input-group').querySelector('input[type="number"]');
+        let value = parseInt(input.value);
+        if (value > 1) {
+            input.value = value - 1;
+            stock(input, price, productId, userId);
+            stockCheck(input, maxStock);
+        }
+    }
+</script>
                                             </td>
                                             
                                             <input type="text" id="stockk<%= product.productId.stock %>" value="<%= product.productId.stock %>" hidden>
@@ -78,7 +108,10 @@
                                     
                                 </tbody>
                         <% }) %>
+
+                       
                         </table>
+                        
 <script>
     function notFocus(e){
         e.blur()
@@ -154,6 +187,13 @@
                     </aside><!-- End .col-lg-3 -->
                 </div><!-- End .row -->
             </div><!-- End .container -->
+            <% } else { %>
+
+                <div class="mt-5 mb-5 ">
+                    <p class="text-center text-primary">Cart is Empty</p>
+                </div>
+
+            <% } %>
         </div><!-- End .cart -->
     </div><!-- End .page-content -->
 </main><!-- End .main -->
@@ -168,7 +208,10 @@
 
 <%- include('../layouts/mobileView.ejs') %>
 
+
+
 <script>
+
 
 function stock(e,price,proId,cartId){
     const Tprice= document.getElementById(`price${proId}`)
@@ -208,6 +251,8 @@ fetch(`/deleteCart?id=${id}` , {method : 'PUT'})
             text: "Cart Deleted Successfully",
             icon: "success"
         });
+
+        
         
         $('#reloadDiv').load('/cart #reloadDiv')
         
@@ -238,7 +283,6 @@ if(pro == val.value){
 
 }
 
-
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -253,6 +297,24 @@ if(pro == val.value){
 <script src="assets/js/main.js"></script>
 
 
+<style>
 
+.b-inc {
+
+    /* background-color: red; */
+    border: hidden;
+    padding: 1px;
+    
+}
+
+.b-dec{
+    
+    border: hidden;
+    /* background-color: green; */
+    padding: 1.8px;
+
+}
+
+</style>
 
 <%- include('../layouts/footer1.ejs')-%>
