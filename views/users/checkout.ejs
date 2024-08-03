@@ -861,7 +861,7 @@
 												</div><!-- End .accordion -->
 
 											<div>
-														<span id="placeOrder-error"></span>
+												<span id="placeOrder-error" style="color: red;"></span>
 												<button type="button" onclick="sumbitPayment('<%= userData?._id %>',' <%= cartData?.Total_price %>')" class="btn btn-outline-primary-2 btn-order btn-block">
 
 													<span class="btn-text">Place Order</span>
@@ -1153,7 +1153,11 @@ function sumbitPayment(amount, userId){
 	
 	const form = document.getElementById('myForm'); 
     const Radio = document.querySelector('input[name="peyment"]:checked');
-    
+	const errorMessage = document.getElementById('placeOrder-error');
+	if (!Radio) {
+            errorMessage.textContent = "Please select a payment method.";
+            return;
+        }
     if(Radio.value == 'Online Peyment'){
 
         razorPay(amount, userId)

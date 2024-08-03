@@ -10,7 +10,7 @@
                 </button>
             
                 <a href="index.html" class="logo">
-                    <img src="assets/images/logo.png" alt="Jersify Logo" width="105" height="25">
+                    <img src="/assets/images/logo.png" alt="Jersify Logo" width="105" height="25">
                 </a>
             
                 <nav class="main-nav">
@@ -26,14 +26,18 @@
                         
                         </li>
                         <li>
-                            <a href="#" class="sf-with-ul" style="padding-right: 10px;">Category</a>
+
+                            <a href="#" class="sf-with-ul" style="padding-right: 11px;">Category</a>
                             
-                            <ul class="p-2 " >
-                                
-                                 
- 
-                                 <li><a href="/catagory"></a></li>
-                             </ul>
+                             <ul class="p-2" style="border-radius: 10px;">
+
+                                  <% categoryData.forEach(val => { %>
+
+                                    <li><a href="/category/<%= val.name %>"><%= val.name %></a></li>
+                                        
+                                <%  }); %>
+                          
+                            </ul>
 
                         </li>
                         <li>

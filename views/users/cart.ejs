@@ -100,7 +100,7 @@
                                         <td class="total-col" id='price<%= product.productId._id %>'><%= product.price %></td>
 
 
-                                        <td class="remove-col"><button class="btn-remove" onclick="deleteCart('<%= product.productId._id %>')"><i class="icon-close"></i></button></td>
+                                        <td class="remove-col"><button class="btn-remove" onclick="deleteCart('<%= product.productId._id %>'), removeCoupen()"><i class="icon-close"></i></button></td>
 
                                         
 
@@ -282,7 +282,25 @@ if(pro == val.value){
 }
 
 }
+function removeCoupen(){
 
+fetch(`/removeCop` , {method : 'put'})
+
+.then(res => res.json())
+
+.then(data => {
+
+    console.log("VAVAVAVAVAVVAV");
+
+    if(data.succ){
+
+        window.location.reload()
+
+    }
+
+})
+
+}
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

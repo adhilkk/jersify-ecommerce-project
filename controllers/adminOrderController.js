@@ -210,20 +210,20 @@ const returnorderManage = async (req, res) => {
                 await Order.findOneAndUpdate({ _id: ordId, "products._id": proIdd }, { $inc: { orderAmount: -moneyDecreses } });
             }
 
-            if (orderGot.products[0].retruned && ordId.peyment !== 'COD') {
+            if (orderGot.products[0].retruned && ordId.payment !== 'Cash on Delivery') {
 
-                if (orderGot.percentage >= 1) {
+                if (orderGot.percentage >= 1) { 
                     
                     let newVall = Math.floor((moneyDecreses - (moneyDecreses * orderGot.percentage / 100)));
 
                     
                      
-                    await Wallet.findOneAndUpdate({ userId: orderGot.userId }, { $inc: { balance: newVall }, $push: { transaction: { amount: newVall, creditOrDebit: 'credit' } } }, { new: true, upsert: true });
+                    await Wallet.findOneAndUpdate({ userId: orderGot.userId }, { $inc: { balance: newVall }, $push: { history: { amount: newVall, transactionType: 'credit' } } }, { new: true, upsert: true });
 
                 } else {
-
-                    await Wallet.findOneAndUpdate({ userId: orderGot.userId }, { $inc: { balance: moneyDecreses }, $push: { transaction: { amount: moneyDecreses, creditOrDebit: 'credit' } } }, { new: true, upsert: true });
-
+                            console.log("1111");
+                    await Wallet.findOneAndUpdate({ userId: orderGot.userId }, { $inc: { balance: moneyDecreses }, $push: { history: { amount: moneyDecreses, transactionType: 'credit' } } }, { new: true, upsert: true });
+                    console.log("22222");
                 }
                 
             }

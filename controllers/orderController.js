@@ -300,6 +300,7 @@ const orderRecieved = async (req, res , next) => {
                     //  Update Cart :-
             
                     const cartRemove = await Cart.updateOne({ userId: userIdd }, { $unset: { product : 1, }, $set: {Total_price: 0, coupenDisPrice: 0, percentage: 0 } });
+                    await User.findOneAndUpdate({ _id: userIdd }, { $pop: { applyCoupen: 1 } });
                         
                     if (cartRemove) {
             
@@ -451,37 +452,39 @@ const returnOrd = async (req, res) => {
         
         //  Return Product :-
         
-        const b = await Order.updateOne({_id : ordId} ,  {$set : {for : true}});
-
-        const returnMasg = await Order.findOneAndUpdate({ _id: ordId, 'products.productId': proId }, {
-
-            $set: {
-
-                'products.$.retruned': true, "products.$.reason": reason,
-
+        const returnMasg = await Order.findOneAndUpdate(
+        
+            { _id: ordId, "products.productId": proId },
+          
+            {
+                $set: {
+                    "products.$.retruned": true,
+                    "products.$.reason": reason,
+                    "products.$.forButton": true,
+                },
             }
+          
+        );
 
-        });
-
-
-        if (returnMasg && b) {
+        if (returnMasg) {
          
-            
+            console.log("Okey Anuu");
          
         } else {
 
-            
+            console.log("Okey Allaaaa");
 
         }
 
     } catch (error) {
 
-        console.log(error.message);
+        next(error,req,res);
+
         
     }
 
 };
-
+   
 
 
 //  Download Invoice (Put Method) :-

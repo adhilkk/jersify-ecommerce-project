@@ -59,25 +59,19 @@
 
                                 </li>
                                 <li>
-                                    <a href="" class="sf-with-ul">Category</a>
 
-                                    <div class="megamenu megamenu-sm">
-                                        <div class="row no-gutters">
-                                            <div class="col-md-6">
-                                                <div class="menu-col">
-                                                    <div class="menu-title">Category Details</div><!-- End .menu-title -->
-                                                    <ul>
-                                                        <li><a href="product.html">National Team Jersy</a></li>
-                                                        <li><a href="product-centered.html">Club Team Jersy</a></li>
-                                                        <li><a href="product-gallery.html">Retro Jersy</a></li>
-                                                        <li><a href="product-extended.html"><span>Costimised Jersy<span class="tip tip-new">Soon</span></span></a></li>
-                                                        
-                                                    </ul>
-                                                </div><!-- End .menu-col -->
-                                            </div><!-- End .col-md-6 -->
-
-                                        </div><!-- End .row -->
-                                    </div><!-- End .megamenu megamenu-sm -->
+                                    <a href="#" class="sf-with-ul" style="padding-right: 11px;">Category</a>
+                                    
+                                     <ul class="p-2" style="border-radius: 10px;">
+        
+                                          <% categoryData.forEach(val => { %>
+        
+                                            <li><a href="/category/<%= val.name %>"><%= val.name %></a></li>
+                                                
+                                        <%  }); %>
+                                  
+                                    </ul>
+        
                                 </li>
                                 <li>
                                     <a href="#" class="">Contact</a>

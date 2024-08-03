@@ -159,11 +159,13 @@ const deleteCart = async(req , res)=>{
     try {
 
         const proId = req.query.id
+       const userIdd = req.session.user._id
 
         
 
         const deleteCartt = await Cart.findOneAndUpdate({userId : req.session.user._id} , {$pull :{product : {productId : proId}}});
         const deleteCartta = await Cart.findOneAndUpdate({userId : req.session.user._id} , {$set :{discountAmount:[]}});
+        
 
         if(deleteCartt ||deleteCartta){
 
