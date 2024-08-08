@@ -777,7 +777,7 @@
 
 														<h2 class="card-title">
 
-															<input type="radio" name="peyment" value="Cash on Delivery" checked class="bg-primary">
+															<input type="radio" name="payment" value="Cash on Delivery" checked class="bg-primary">
 
 															<label for="">Cash on Delivery</label>
 
@@ -791,7 +791,7 @@
 
 														<h2 class="card-title">
 
-															<input type="radio" name="peyment" value="Cash on Delivery" disabled class="bg-primary opacity-50">
+															<input type="radio" name="payment" value="Cash on Delivery" disabled class="bg-primary opacity-50">
 
 															
 
@@ -827,7 +827,7 @@
 
                                                         <h2 class="card-title">
 
-                                                            <input type="radio" name="peyment" id="wallet" value="wallet" class="bg-primary">
+                                                            <input type="radio" name="payment" id="wallet" value="wallet" class="bg-primary">
 
                                                             <label for="wallet">wallet</label>
 
@@ -846,7 +846,7 @@
 
 														<h2 class="card-title">
 
-															<input type="radio" value="Online Peyment" name="peyment" 
+															<input type="radio" value="Online Peyment" name="payment" 
 
 															class="bg-primary">
 
@@ -1152,7 +1152,7 @@ if(msg.textContent == 'Address Edited'){
 function sumbitPayment(amount, userId){
 	
 	const form = document.getElementById('myForm'); 
-    const Radio = document.querySelector('input[name="peyment"]:checked');
+    const Radio = document.querySelector('input[name="payment"]:checked');
 	const errorMessage = document.getElementById('placeOrder-error');
 	if (!Radio) {
             errorMessage.textContent = "Please select a payment method.";
@@ -1293,7 +1293,7 @@ function removeCoupen(){
 
 	.then(data => {
 
-		console.log("VAVAVAVAVAVVAV");
+		
 
 		if(data.succ){
 

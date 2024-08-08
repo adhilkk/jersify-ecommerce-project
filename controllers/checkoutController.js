@@ -8,6 +8,7 @@ const Order = require('../models/orderModel');
 const razorPay = require('../controllers/razorpay');
 const crypto = require('crypto');
 const Wallet= require("../models/wallet");
+const Sequence = require("../models/Sequence");
 
 
 
@@ -44,7 +45,7 @@ const loadCheckout = async (req, res , next) => {
                 const cartData = await Cart.findOneAndUpdate({ userId: req.session.user._id }, { $set: { totalCartPrice: newTprice } }, { upsert: true, new: true });
 
                 const b= cartData.product.disAmount
-                console.log(b,'11111111111');
+            
                             
                 res.render("users/checkout", { login: req.session.user,coupenData, categoryData, addres: addresData, userData, msgg: msg ,cartData,newTprice});
                 
@@ -376,32 +377,40 @@ const RazorPay = async (req, res) => {
 
 };
 
+async function getNextSequence(name) {
+    const sequence = await Sequence.findOneAndUpdate(
+      { name: name },
+      { $inc: { value: 1 } },
+      { new: true, upsert: true }
+    );
+    return sequence.value;
+  }
 
 const failRazorpay = async (req, res) => {
     
     try {
 
+        console.log("1");
+        
+        const orderId = await getNextSequence('orderId'); 
+
         const userIdd = req.session.user._id
-        const user = req.session.user;
 
-        const cartData = await Cart.findOne({ userId: userIdd });
+        const cart = await Cart.findOne({ userId: userIdd });
 
-        const peyMethod = req.body.peyment
+        const payMethod = req.body.payment;
 
-        const cartt = await Cart.findOne({ userId: userIdd });
-        const addresss = await Address.findOne({ userId: userIdd, 'addresss.status': true }, { 'addresss.$': 1 });
-        const product = cartt.product;
+        const addres = await Address.findOne({ userId: userIdd, 'addresss.status': true }, { 'addresss.$': 1 });
 
-        const { name, phone, address, pincode, locality, state, city } = addresss?.addresss?.[0] ?? {};
-         const sumDiscount= product.reduce((acc, val) => acc + val.discountAmount, 0);
-                const sumDisAmount= product.reduce((acc, val) => acc + val.disAmount, 0);
-                
+        const { name, phone, address, pincode, locality, state, city } = addres?.addresss?.[0] ?? {};
+        console.log("2");
+
 
         const getFailedOrd = await Order.create({
-
+            orderId: orderId, 
             userId: userIdd,
 
-            products: cartt.product.map((val) => ({
+            products: cart.product.map((val) => ({
 
                 productId: val.productId,
                 quantity: val.quantity,
@@ -423,19 +432,18 @@ const failRazorpay = async (req, res) => {
 
             orderDate: Date.now(),
             orderStatus:'pending',
-            orderAmount: cartt.Total_price,
-            payment: peyMethod,
-            coupenDis: cartt.coupenDisPrice,
-            percentage: cartt.percentage,
-            overallDis:sumDisAmount
+            orderAmount: cart.Total_price,
+            payment: payMethod,
+            overallDis: cart.coupenDisPrice,
+            percentage: cart.percentage,
 
         });
+        console.log("3");
+        console.log(getFailedOrd);
 
         await Cart.updateOne({userId : userIdd} , {$unset : {products : 1 , coupenDisPrice : 0, percentage:0 , Total_price :0}});
 
         if (getFailedOrd) {
-
-            
             
             res.redirect("/orders");
 
@@ -448,9 +456,8 @@ const failRazorpay = async (req, res) => {
     }
 
 };
-
 const sucRazorpay = async (req, res, next) => {
-    console.log("aaaaaaaaaaaaaaaaaaaaaaa");
+
     
     try {
 

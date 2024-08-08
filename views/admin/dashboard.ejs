@@ -194,11 +194,11 @@
 
                             <td>
                               
-                              <img src="/productImage/<%= val.productData[0].image[0] %>" alt="image" />
+                              <img src="/productImage/<%= val.productData[0]?.image[0] %>" alt="image" />
                               
                             </td>
 
-                            <td> <%= val.productData[0].name %> </td>
+                            <td> <%= val.productData[0]?.name %> </td>
 
                             <td> <%= val.ttlCount %> </td>
 

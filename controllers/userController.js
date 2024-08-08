@@ -162,7 +162,7 @@ const verify_otp = async (req, res) => {
       });
       // Add referedCode if referenceCode is present
       if (referedCode) {
-        console.log("asdkjfhiawjdghhhhhhshhkhhjfhsdkghsfkghkdf")
+        
         newUser.referedCode = referedCode;
       }
       
@@ -234,9 +234,8 @@ const login_user = async (req, res) => {
 
       if (check) {
         if (userData.is_blocked) {
-          return res.redirect("/users/login", {
-            error: "Your account is blocked. Please contact support.",
-          });
+          req.flash("flash", "Your account is blocked. Please contact support.");
+          return res.redirect("/login");
         }
         req.session.user = userData;
        return  res.redirect("/");
@@ -393,25 +392,26 @@ const priceFilter = async (req, res, next) => {
 
 const filterByCategory = async (req, res, next) => {
   try {
-    const { cateId } = req.body;
+    const { cateId, isChecked } = req.body;
 
-    
-
-    const categoryData = await category.find({ _id: cateId });
-
-    
-
-    if (categoryData.length > 0) {
-      const products = await product.find({ 
-        category: new mongoose.Types.ObjectId(cateId), 
-        status: true 
-      }).populate('category');
-
+    if (isChecked) {
      
+      const categoryData = await category.find({ _id: cateId });
 
-      res.send(products);
+      if (categoryData.length > 0) {
+        const products = await product.find({ 
+          category: new mongoose.Types.ObjectId(cateId), 
+          status: true 
+        }).populate('category');
+
+        res.send(products);
+      } else {
+        res.status(404).send({ error: "Category not found" });
+      }
     } else {
-      res.status(404).send({ error: "Category not found" });
+      
+      const products = await product.find({ status: true }).populate('category');
+      res.send(products);
     }
   } catch (error) {
     next(error, req, res);
@@ -513,19 +513,7 @@ const highTolow = async (req, res, next) => {
   }
 };
 
-const catchAll = async (req, res, next) => {
-  try {
-    const categoryData = await Category.find({ is_Listed: true });
 
-    if (req.session.user) {
-      res.render("404");
-    } else {
-      res.render("404", { categoryData });
-    }
-  } catch (error) {
-    next(error, req, res);
-  }
-};
 
 //  Search Product  :-
 
@@ -554,12 +542,12 @@ const loadWallet = async (req, res) => {
   try {
 
       const categoryData = await category.find({ is_Listed: true });
-console.log("111111111111");
+
       if (req.session.user) {
-        console.log("222222222");
+       
 
           const walletData = await Wallet.findOne({ userId: req.session.user._id });
-          console.log(walletData,'qqqqqqqqqqqqqqqqqqqqqqq');
+          
           
 
           res.render('users/wallet', { login: req.session.user, categoryData, walletData });
@@ -643,12 +631,48 @@ const loadcategory = async (req, res) => {
 
 };
 
+const contactLoad = async (req,res)=>{
+  try {
+    const categoryData = await category.find({ is_listed: true });
+
+    res.render('users/contact',{categoryData })
+  } catch (error) {
+    console.log(error.message);
+    
+  }
+}
+const aboutLoad = async (req,res)=>{
+  try {
+    const categoryData = await category.find({ is_listed: true });
+
+    res.render('users/about',{categoryData })
+  } catch (error) {
+    console.log(error.message);
+    
+  }
+}
+
+
+
+const catchAll = async (req, res, next) => {
+  try {
+    const categoryData = await category.find({ is_Listed: true });
+
+    if (req.session.user) {
+      res.render("users/404");
+    } else {
+      res.render("users/404", { categoryData });
+    }
+  } catch (error) {
+    next(error, req, res);
+  }
+};
+
 
 
 
 module.exports = {
   loadRegister,
-  // registerPage,
   register_user,
   login_user,
   verify_otp,
@@ -674,4 +698,6 @@ module.exports = {
   filterByCategory,
   loadWallet,
   loadcategory,
+  contactLoad,
+  aboutLoad,
 };

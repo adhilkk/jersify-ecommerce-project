@@ -221,9 +221,9 @@ const returnorderManage = async (req, res) => {
                     await Wallet.findOneAndUpdate({ userId: orderGot.userId }, { $inc: { balance: newVall }, $push: { history: { amount: newVall, transactionType: 'credit' } } }, { new: true, upsert: true });
 
                 } else {
-                            console.log("1111");
+                           
                     await Wallet.findOneAndUpdate({ userId: orderGot.userId }, { $inc: { balance: moneyDecreses }, $push: { history: { amount: moneyDecreses, transactionType: 'credit' } } }, { new: true, upsert: true });
-                    console.log("22222");
+                    
                 }
                 
             }

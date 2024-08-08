@@ -21,24 +21,13 @@ const loadOrder = async (req, res , next) => {
 
             });
 
-            const limit = 3;
-            const page = parseInt(req.query.page) || 1;
-            const skip = (page - 1) * limit;
-
-            const totalOrd = await Order.countDocuments({
-
-                userId: req.session.user._id,
-
-            });
-
-            const totalPages = Math.ceil(totalOrd / limit);
+           
 
             const orderData = await Order.find({ userId: req.session.user._id })
                 
                 .populate("products.productId")
             
-                .skip(skip)
-                .limit(limit);
+               
  
                 
 
@@ -48,8 +37,7 @@ const loadOrder = async (req, res , next) => {
                 categoryData,
                 address: addressData,
                 orderData,
-                currentPage: page,
-                totalPages,
+                 
 
             });
 
@@ -77,6 +65,8 @@ const orderView = async (req, res , next) => {
         const categoryData = await Category.find({ is_Listed: true });
 
         const order = await Order.findOne({ _id: req.query.id }).populate('products.productId');
+       
+        
 
         res.render('users/orderDetails', { login: req.session.user, order, categoryData });
         
@@ -197,7 +187,7 @@ const orderRecieved = async (req, res , next) => {
 
 
 
-                const peyMethod = req.body.peyment
+                const peyMethod = req.body.payment
         
                 const cartt = await Cart.findOne({ userId: userIdd });
 
@@ -209,7 +199,7 @@ const orderRecieved = async (req, res , next) => {
                 const { name, phone, address, pincode, locality, state, city } = addresss?.addresss?.[0] ?? {};
                 const orderId = await getNextSequence('orderId'); 
 
-                console.log(product,'aaaaaaaaaaaaaproduct');
+               
 
 
                 const sumDiscount= product.reduce((acc, val) => acc + val.discountAmount, 0);
@@ -245,7 +235,7 @@ const orderRecieved = async (req, res , next) => {
                 
                 req.session.orderGot = orderGot
 
-                console.log(orderGot,'orderGot');
+               
 
                 // if (req.body.peyment == 'wallet') {
 
@@ -390,6 +380,8 @@ const orderCancel = async (req, res ,) => {
         //  Adding Stock Back :-
 
         const orderFind = await Order.findOne({ _id: ordId, "products.productId": proId, "products.canceled": true, }, { "products.$": 1, });
+        const order = await Order.findOne({ _id: req.query.id }).populate('products.productId');
+        
 
         if (orderFind) {
             
@@ -399,9 +391,6 @@ const orderCancel = async (req, res ,) => {
 
             //  Manage The Money :-
 
-            const moneyDecrese = orderFind.products[0].price
-
-            await Order.findOneAndUpdate({ _id: ordId, 'products.productId': proId }, { $inc: { orderAmount: -moneyDecrese } });
 
         }
         //  CancelProduct Amount Adiing The Wallet :-

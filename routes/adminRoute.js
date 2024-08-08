@@ -45,6 +45,7 @@ admin_router.get("/userList",admin_middilware.isLogin,  adminController.loaduser
 admin_router.post("/adminLogin", adminController.handleLogin);
 admin_router.post("/adminLogout", adminController.handleLogout);
 admin_router.get("/dashboard", admin_middilware.isLogin, adminController.renderDashboard);
+
 //  Year Chart (put)
 admin_router.put('/chartYear', adminController.chartYear);
 
@@ -54,7 +55,7 @@ admin_router.put('/monthChart', adminController.monthChart);
 
 //for blocking
 
-// admin_router.get("/admin/users", admin_middilware.isLogin, adminController.getUsers);
+
 admin_router.get("/admin/users/:id", admin_middilware.isLogin, adminController.toggleBlockUser);
 
 // Category routes

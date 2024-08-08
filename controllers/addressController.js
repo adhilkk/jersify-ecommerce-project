@@ -75,7 +75,7 @@ const addAddress = async (req, res , next) => {
 
             } else {
 
-                console.log("error aneeee");
+                console.log(error.message);
 
             }
             
@@ -125,7 +125,7 @@ const chooseAddress = async (req, res) => {
     
     try {
 
-        console.log("j");
+       
 
         const addId = req.query.id
 

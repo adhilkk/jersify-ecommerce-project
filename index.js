@@ -106,7 +106,11 @@ app.use('/admin', adminRouter);
 app.use('/', userRouter);
 
 
+app.get('*', (req, res) => {
+    
+  res.redirect('/404');
 
+});
 
 // Server
 const PORT = process.env.PORT || 5000;

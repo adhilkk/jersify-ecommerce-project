@@ -60,8 +60,7 @@ const addCart = async ( req , res ) => {
         const cartProduct = await PRODUCTS.findOne({_id:proId});
        
        
-            console.log(cartProduct,'cartProduct');
-
+           
        
 
         const exist= await Cart.findOne({userId:userIdd , product: {$elemMatch: {productId: proId} } } );
@@ -75,7 +74,7 @@ const addCart = async ( req , res ) => {
                 disAmount=0
 
             }
-            console.log(disAmount,'disAmount');
+            
 
            
            await Cart.findOneAndUpdate({userId:userIdd},
@@ -131,7 +130,7 @@ const cartEdit = async (req, res) => {
        
       
       const total = updatedCart.product.reduce((acc, product) => acc + product.price,0);
-      console.log(total,'total');
+     
   
        await Cart.findByIdAndUpdate(
 

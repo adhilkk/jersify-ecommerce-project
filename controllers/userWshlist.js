@@ -1,16 +1,7 @@
-//  Import User Modal :-
 const User = require('../models/userModel');
-
-//  Import Product Modal :-
 const Product = require('../models/product');
-
-//  Import Category Modal :-
 const Category = require('../models/categoryModel');
-
-//  Import Wishlist Modal :-
 const Wishlist = require('../models/wishlist');
-
-//  Import Cart Modal :-
 const Cart = require('../models/cart');
 
 //  loadWishlist (Get Method) :-
@@ -26,7 +17,7 @@ const loadWishlist = async (req, res) => {
         if (req.session.user) {
           
 
-            // const wishlistData = await Wishlist.findOne({ userId: req.session.user._id }).populate('products.productId'); 
+            
             const wishlistData = await Wishlist.findOne({ userId: req.session.user._id }).populate('products.productId');
          
             if (wishlistData) {

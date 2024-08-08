@@ -1,7 +1,5 @@
 const category = require("../models/categoryModel");
 const Products = require("../models/product");
-
-
 const fs = require("fs");
 const path = require("path");
 
@@ -72,9 +70,9 @@ const addProducts = async (req, res) => {
 
     const offerPorice = req.body.Discountprice ? Math.round((req.body.price / 100) * (100 - req.body.Discountprice)) : 0
 
-   console.log(req.body.Discountprice);
+
   
-  console.log(offerPorice);    
+
 
     const product = Products.create({
       name: req.body.product,
@@ -139,11 +137,11 @@ const productStatus = async (req, res) => {
 const editProduct = async (req, res) => {
 try {
  
-  console.log("a");
+
     const produt= await Products.findOne({_id:req.params.id});
     const {product,price,Discountprice,stock,description,category,brand}=req.body;
 
-    console.log(Discountprice,"1111");
+
    
     
     

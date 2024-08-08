@@ -109,13 +109,12 @@ const renderLogin = (req, res) => {
     try {
       const order = await Order.find();   //  Order
 
-      const totalOrdAmount = order.reduce((acc, val) => acc + val.orderAmount, 0);    //  TotalAmount
-      const totalOrdDiscount = order.reduce((acc, val) => acc + val.overallDis, 0);    //  totalOrdDiscount
-      console.log(totalOrdDiscount,"totalOrdDiscount");
-      console.log(order,"order");
+      const totalOrdAmount = order.reduce((acc, val) => acc + val.orderAmount, 0);    
+      const totalOrdDiscount = order.reduce((acc, val) => acc + val.overallDis, 0);    
+    
   
       
-    const totalProduct = await Product.find()   //  Product
+    const totalProduct = await Product.find()  
 
     //  Best Selling Products :-
 
@@ -269,7 +268,7 @@ const renderLogin = (req, res) => {
       },
 
     ]);
-    console.log(bestSellBrand,"");
+    
   
       res.render("admin/dashboard", { order, totalOrdAmount, totalOrdDiscount, totalProduct, bestSellPro, bestSellCate, bestSellBrand})
     } catch (error) {
@@ -283,7 +282,7 @@ const renderLogin = (req, res) => {
   const getUsers = async (req, res) => {
     try {
       const users = await User.find({});
-      console.log(req.session.admin,"admin")
+     
       res.render('admin/users', { clint: users });
     } catch (error) {
       res.status(500).send(error.message);

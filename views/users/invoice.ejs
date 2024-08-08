@@ -50,8 +50,8 @@
 
                               <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
 
-                                 <img src="/assets/images/icons/Hicon.png" style="width: 75px;" alt="">
-                                 <P style="font-weight: bold;">AUDIOFYX</P>
+                                 <img src="/assets/images/logo.png"  style="width: 75px;" alt="">
+                                 <!-- <P style="font-weight: bold;">JERSIFY</P> -->
                                 
                               </div>
 
@@ -84,7 +84,7 @@
 
                                     <address class="text-dark ">
                                        <%= e.deliveryAddress.name %><br>
-                                       <%= e.deliveryAddress.city %>, <%= e.deliveryAddress.state %>, Ind
+                                       <%= e.deliveryAddress.city %>, <%= e.deliveryAddress.state %>
                                     </address>
 
                                  </div>
@@ -175,7 +175,7 @@
                                              <td>
                                                 <p>
                                                    $<%= e.orderAmount + e.coupenDis %><br>
-                                                  -$<%= e.coupenDis %><br>
+                                                  -$<%= e.overallDis %><br>
                                                  
                                                 </p>
                                                 <h5 class="text-success">$<%= e.orderAmount %></h5>
@@ -365,7 +365,7 @@ function downloadPDF(invoiceNo) {
         var docPDF = new jsPDF();
         var imgHeight = canvas.height * 208 / canvas.width; 
         docPDF.addImage(imgData, 'PNG', 15, 15, 170, imgHeight); 
-        docPDF.save(invoiceNo + '.pdf'); 
+        docPDF.save('Invoice.pdf'); 
 
    });
 

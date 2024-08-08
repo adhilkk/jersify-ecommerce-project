@@ -145,8 +145,6 @@ const coupenAction = async (req, res) => {
 };
 
 //  Using Coupen
-
-
 const useCoupen = async (req, res , next) => {
     
     try {
@@ -159,12 +157,10 @@ const useCoupen = async (req, res , next) => {
             
             const cartData = await Cart.findOne({ userId: req.session.user._id });
 
-            // const exist = await User.findOne({ _id: req.session.user._id, applyCoupen: { $in: [coupen.coupenId] } });
-
-            // if (!exist) {
+           
                 
-                const cartPrice = cartData.Total_price;  //  CartPrice
-                const coupenDis = coupen.discountt     //  Coupen Discount
+                const cartPrice = cartData.Total_price;  
+                const coupenDis = coupen.discountt     
                 
                 if (coupen) {
                             
@@ -184,12 +180,7 @@ const useCoupen = async (req, res , next) => {
                     }
                 }
 
-            // } else {
-
-            //     req.flash('flash', 'usedOne');
-            //     res.redirect("/checkout");
-
-            // }
+           
 
         } else {
 
@@ -223,7 +214,7 @@ const remove = async (req, res) => {
 
         const updateCartt = await Cart.findOneAndUpdate({userId : userIdd} , {$set : {coupenDisPrice : 0 , percentage : 0}})
 
-        await User.findOneAndUpdate({ _id: userIdd }, { $pop: { applyCoupen: 1 } }); //  Remove Coupen Id in User Side
+        await User.findOneAndUpdate({ _id: userIdd }, { $pop: { applyCoupen: 1 } }); 
         
         if (updateCart && updateCartt) {
                 

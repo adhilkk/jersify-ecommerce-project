@@ -12,7 +12,7 @@ const loadReport = async (req, res) => {
         if (reportVal == "Week") {
 
             const crrDate = new Date();
-            console.log(crrDate.getFullYear());
+           
 
             const weeStart = new Date(
 
@@ -98,7 +98,7 @@ const customReport = async (req, res) => {
         });
 
        
-        console.log(getData);
+     
 
         res.send({ getData });
 

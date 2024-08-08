@@ -30,11 +30,11 @@ user_router.get('/' , user_Controller.loadHome)
 user_router.post('/login',user_Controller.login_user);
 user_router.get('/login' ,userAuth.loginUser, user_Controller.loadLogin)
 user_router.get('/logout' ,userAuth.user, user_Controller.loadLogout)
-user_router.get('/shop' , user_Controller.loadShop)
+user_router.get('/shop' ,userAuth.blockuser, user_Controller.loadShop)
 user_router.get('/category/:id',user_Controller.loadcategory)
 
 
-// user_router.get('/registerPage',user_Controller.registerPage)
+
 
 user_router.get('/registerPage',user_Controller.loadRegister)
 user_router.post('/register', user_Controller.register_user);
@@ -79,6 +79,14 @@ user_router.post("/chooseAddress", address_controller.chooseAddress);
 
 user_router.get('/product', user_Controller.products);
 user_router.get('/productDetails',user_Controller.productDetails)
+
+
+
+//contact
+user_router.get('/contact',user_Controller.contactLoad)
+
+//about
+user_router.get('/about',user_Controller.aboutLoad)
 
 	
 // cart
@@ -166,4 +174,8 @@ user_router.get("/wallet", user_Controller.loadWallet);
 //  Download Invoice
 user_router.get("/downloadInvoice", orderController.downloadInvoice);
 
+//  404 Page :-
+user_router.get('/404', user_Controller.catchAll);
+ 
 module.exports = user_router;
+    

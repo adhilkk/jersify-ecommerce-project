@@ -1,13 +1,9 @@
 const Product = require("../models/product");
-
-//  Import Category Modal :-
 const Category = require("../models/categoryModel");
-
-//  Import Order Modal :-
 const Order = require("../models/orderModel");
-
-//  Import Offer Model :-
 const Offer = require('../models/adminOffer');
+
+
 
 //  loadOffer (Get Method) :-
 
@@ -40,8 +36,7 @@ const addOffer = async (req, res) => {
         const findCategory = await Category.findOne({ name: category })
 
         const findProduct = await Product.find({'category': findCategory._id }).populate('category');
-        console.log(findProduct,"12345678");
-
+       
         const exist = await Offer.findOne({
 
             $or: [
@@ -76,7 +71,7 @@ const addOffer = async (req, res) => {
 
         } else {
 
-            console.log("Fail");
+            
 
         }
 
